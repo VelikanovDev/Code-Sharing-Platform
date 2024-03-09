@@ -1,0 +1,49 @@
+.App {
+  text-align: center;
+  width: 70%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  color: #007bff;
+}
+
+.newSnippet #myInput {
+  width: 100%; /* Example to make the textarea take the full container width */
+  height: 300px; /* Example height, adjust as needed */
+  padding: 10px; /* Optional: Adds some padding inside the textarea */
+  font-size: 16px; /* Optional: Adjusts the font size of the input text */
+  border: 1px solid #ccc; /* Optional: Adds a border around the textarea */
+  border-radius: 4px; /* Optional: Adds rounded corners to the textarea */
+  box-sizing: border-box; /* Ensures padding does not affect the final size */
+  resize: none;
+}
+
+hr {
+  width: 100%;
+  margin: 15px 0;
+}
+
+.actions {
+  display: flex;
+  width: 70%;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.snippet_code {
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow-x: auto;
+  width: 100%;
+  height: 100%;
+}
