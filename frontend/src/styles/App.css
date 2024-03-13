@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /*text-align: center;*/
   width: 70%;
   margin: 50px auto;
   padding: 20px;
@@ -10,18 +10,50 @@
   font-family: Arial, sans-serif;
 }
 
-h2 {
-  color: #007bff;
+.AppHeader {
+  position: relative;
 }
 
+h1 {
+  color: #007bff;
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+}
+
+.AccountPanel {
+  position: absolute;
+  left: 90%;
+}
+
+
+/*.AppHeader {*/
+/*  display: flex;*/
+/*  justify-content: center; !* Center h1 horizontally *!*/
+/*  align-items: center; !* Align h1 vertically *!*/
+/*  padding: 20px;*/
+/*}*/
+
+/*h1 {*/
+/*  margin: 0 auto; !* Ensures h1 stays centered *!*/
+/*}*/
+
+/*.AccountPanel {*/
+/*  margin-right: 90%;*/
+/*}*/
+form, p {
+  text-align: center;
+}
 .newSnippet #myInput {
-  width: 100%; /* Example to make the textarea take the full container width */
-  height: 300px; /* Example height, adjust as needed */
-  padding: 10px; /* Optional: Adds some padding inside the textarea */
-  font-size: 16px; /* Optional: Adjusts the font size of the input text */
-  border: 1px solid #ccc; /* Optional: Adds a border around the textarea */
-  border-radius: 4px; /* Optional: Adds rounded corners to the textarea */
-  box-sizing: border-box; /* Ensures padding does not affect the final size */
+  width: 100%;
+  height: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
   resize: none;
 }
 
