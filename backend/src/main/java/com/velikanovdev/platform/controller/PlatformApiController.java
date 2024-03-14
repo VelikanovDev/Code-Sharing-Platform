@@ -29,7 +29,7 @@ public class PlatformApiController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> addCode(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<?> addSnippet(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
         String code = payload.get("code");
 
