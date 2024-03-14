@@ -27,11 +27,16 @@ h2 {
   text-align: center;
 }
 
-.AccountPanel {
+.AccountMenu {
   position: absolute;
   left: 90%;
 }
 
+.addButton {
+  position: relative;
+  left: 91%;
+  display: block;
+}
 
 /*.AppHeader {*/
 /*  display: flex;*/

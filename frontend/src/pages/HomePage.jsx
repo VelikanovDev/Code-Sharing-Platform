@@ -8,7 +8,7 @@ const HomePage = ({ username, role, snippetList, deleteSnippet }) => {
   return (
     <div className={"homePage"}>
       <hr />
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div className={"addButton"}>
         <IconButton
           aria-label="add"
           onClick={() => {

@@ -5,7 +5,7 @@ const AppHeader = ({ isLoggedIn, handleDeleteAll, handleLogout }) => {
   return (
     <header className="AppHeader">
       {isLoggedIn && (
-        <div className={"AccountPanel"}>
+        <div className={"AccountMenu"}>
           <AccountMenu
             username={localStorage.getItem("username")}
             deleteAll={handleDeleteAll}
