@@ -9,11 +9,12 @@ import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function AccountMenu({ username, deleteAll, logout }) {
+const AccountMenu = ({ username, role, deleteAll, logout }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const role = localStorage.getItem("role");
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -87,7 +88,7 @@ export default function AccountMenu({ username, deleteAll, logout }) {
                   >
                     {role === "ADMIN" && [
                       <MenuItem
-                        onClick={() => console.log("rer")}
+                        onClick={() => navigate("/users")}
                         key="show-users"
                       >
                         Show users
@@ -96,7 +97,9 @@ export default function AccountMenu({ username, deleteAll, logout }) {
                         Delete all snippets
                       </MenuItem>,
                     ]}
-                    <MenuItem onClick={logout}>Logout</MenuItem>
+                    <MenuItem onClick={logout} key="logout">
+                      Logout
+                    </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
@@ -106,4 +109,6 @@ export default function AccountMenu({ username, deleteAll, logout }) {
       </div>
     </Stack>
   );
-}
+};
+
+export default AccountMenu;
