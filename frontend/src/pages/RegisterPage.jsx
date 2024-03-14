@@ -28,14 +28,14 @@ const RegisterPage = () => {
       alert("Registration successful!");
       navigate("/login");
     } catch (error) {
-      alert("Registration failed!");
+      setError(error.response.data.message);
     }
   };
 
   return (
     <div>
       <h2>Register a new account</h2>
-      {error && <h3 style={{ color: "red" }}>{error}</h3>}
+      {error && <h3 style={{ color: "red", textAlign: "center" }}>{error}</h3>}
       <form onSubmit={handleSubmit}>
         <MyInput
           type="text"
