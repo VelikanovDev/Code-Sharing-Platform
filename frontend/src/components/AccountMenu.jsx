@@ -65,6 +65,7 @@ export default function AccountMenu({ username, deleteAll, logout }) {
           placement="bottom-start"
           transition
           disablePortal
+          style={{ zIndex: 1300 }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -82,8 +83,14 @@ export default function AccountMenu({ username, deleteAll, logout }) {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    <MenuItem onClick={handleClose}>Show users</MenuItem>
-                    <MenuItem onClick={deleteAll}>Delete all snippets</MenuItem>
+                    {localStorage.getItem("role") === "ADMIN" && [
+                      <MenuItem onClick={handleClose} key="show-users">
+                        Show users
+                      </MenuItem>,
+                      <MenuItem onClick={deleteAll} key="delete-all">
+                        Delete all snippets
+                      </MenuItem>,
+                    ]}
                     <MenuItem onClick={logout}>Logout</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
