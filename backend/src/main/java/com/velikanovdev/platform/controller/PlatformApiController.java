@@ -28,12 +28,6 @@ public class PlatformApiController {
         this.userService = userService;
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Snippet> getCode(@PathVariable Long id) {
-//        // Snippet snippet = platformService.getCode(id);
-//        return ResponseEntity.ok(snippet);
-//    }
-
     @PostMapping("/new")
     public ResponseEntity<?> addCode(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
@@ -91,7 +85,7 @@ public class PlatformApiController {
     }
 
     private SnippetDto convertToDTO(Snippet snippet) {
-        UserDto userDTO = new UserDto(snippet.getUser().getId(), snippet.getUser().getUsername());
+        UserDto userDTO = new UserDto(snippet.getUser().getId(), snippet.getUser().getUsername(), snippet.getUser().getRole());
         return new SnippetDto(snippet.getId(), snippet.getCode(), snippet.getDate(), userDTO);
     }
 }

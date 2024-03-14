@@ -4,6 +4,7 @@ import com.velikanovdev.platform.dto.CredentialsDto;
 import com.velikanovdev.platform.dto.SignUpDto;
 import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.User;
+import com.velikanovdev.platform.enums.Role;
 import com.velikanovdev.platform.exception.AppException;
 import com.velikanovdev.platform.mappers.UserMapper;
 import com.velikanovdev.platform.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -43,6 +45,14 @@ public class UserService {
         }
 
         User user = userMapper.signUpToUser(userDto);
+
+        if(userRepository.findAll().isEmpty()) {
+            user.setRole(Role.ADMIN);
+        }
+        else {
+            user.setRole(Role.USER);
+        }
+
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
 
         User savedUser = userRepository.save(user);

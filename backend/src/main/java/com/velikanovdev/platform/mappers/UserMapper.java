@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(source = "role", target = "role") // This line might be optional if the field names match
     UserDto toUserDto(User user);
 
     @Mapping(target = "password", ignore = true)
