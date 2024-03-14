@@ -39,7 +39,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findUserByUsername(userDto.username());
 
         if (optionalUser.isPresent()) {
-            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
+            throw new AppException("User with login " + userDto.username() + " already exists", HttpStatus.BAD_REQUEST);
         }
 
         User user = userMapper.signUpToUser(userDto);
