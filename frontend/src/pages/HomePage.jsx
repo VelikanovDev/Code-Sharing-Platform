@@ -7,7 +7,6 @@ const HomePage = ({ username, role, snippetList, deleteSnippet }) => {
   const navigate = useNavigate();
   return (
     <div className={"homePage"}>
-      <hr />
       <div className={"addButton"}>
         <IconButton
           aria-label="add"

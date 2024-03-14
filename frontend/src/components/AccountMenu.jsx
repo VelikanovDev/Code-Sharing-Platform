@@ -8,10 +8,12 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { useRef, useState } from "react";
 
 export default function AccountMenu({ username, deleteAll, logout }) {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
+  const role = localStorage.getItem("role");
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -56,7 +58,7 @@ export default function AccountMenu({ username, deleteAll, logout }) {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          {username}
+          {username} ({role})
         </Button>
         <Popper
           open={open}
@@ -83,8 +85,11 @@ export default function AccountMenu({ username, deleteAll, logout }) {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    {localStorage.getItem("role") === "ADMIN" && [
-                      <MenuItem onClick={handleClose} key="show-users">
+                    {role === "ADMIN" && [
+                      <MenuItem
+                        onClick={() => console.log("rer")}
+                        key="show-users"
+                      >
                         Show users
                       </MenuItem>,
                       <MenuItem onClick={deleteAll} key="delete-all">

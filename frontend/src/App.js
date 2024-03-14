@@ -63,6 +63,18 @@ function App() {
     }
   };
 
+  // const handleShowUsers = async () => {
+  //   <Navigate to={"/users"} />;
+  //   // try {
+  //   //   const result = await showUsers();
+  //   //   setRefreshSnippets(true);
+  //   //   console.log(result);
+  //   // } catch (error) {
+  //   //   console.error("Error in handleShowUsers", error);
+  //   //   throw error;
+  //   // }
+  // };
+
   const handleDeleteSnippet = async (snippetId) => {
     try {
       const result = await deleteSnippet(snippetId);
@@ -86,9 +98,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
+    localStorage.clear();
     setIsLoggedIn(false);
   };
 
@@ -103,7 +113,7 @@ function App() {
     }
   };
 
-  // Define a wrapper or layout component that checks for isLoggedIn state
+  // A wrapper or layout component that checks for isLoggedIn state
   const ProtectedRoute = ({ children }) => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     return loggedIn ? children : <Navigate to="/login" replace />;
@@ -159,6 +169,14 @@ function App() {
             </ProtectedRoute>
           ),
         },
+        // {
+        //   path: "users",
+        //   element: (
+        //     <ProtectedRoute>
+        //       <UsersPage />
+        //     </ProtectedRoute>
+        //   ),
+        // },
       ],
     },
   ]);
@@ -167,8 +185,8 @@ function App() {
     <div className="App">
       <AppHeader
         isLoggedIn={isLoggedIn}
-        handleDeleteAll={handleDeleteAll}
-        handleLogout={handleLogout}
+        deleteAll={handleDeleteAll}
+        logout={handleLogout}
       />
       <RouterProvider router={router} />
     </div>
