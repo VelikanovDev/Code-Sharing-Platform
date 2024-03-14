@@ -25,7 +25,7 @@ const LoginPage = ({ onLoginSuccess }) => {
   return (
     <div>
       <h2>Login</h2>
-      {error && <h3 style={{ color: "red" }}>{error}</h3>}
+      {error && <h3 style={{ color: "red", textAlign: "center" }}>{error}</h3>}
       <form onSubmit={handleLogin}>
         <MyInput
           type="text"

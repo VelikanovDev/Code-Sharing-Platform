@@ -14,6 +14,10 @@
   position: relative;
 }
 
+a {
+  text-decoration: none;
+}
+
 h1 {
   color: #007bff;
   text-align: center;
@@ -46,7 +50,16 @@ h2 {
 form, p {
   text-align: center;
 }
-.newSnippet #myInput {
+.newSnippet #titleInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.newSnippet textarea {
   width: 100%;
   height: 300px;
   padding: 10px;

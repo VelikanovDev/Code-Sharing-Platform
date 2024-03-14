@@ -8,14 +8,13 @@ const Snippet = ({ snippet, deleteSnippet }) => {
 
   return (
     <div className={"snippet"}>
-      <h2>Snippet</h2>
       <h3>Author: {snippet.user.username}</h3>
       <h3>Date: {snippet.date}</h3>
       <pre className={"snippet_code"}>
         <code>{snippet.code}</code>
       </pre>
       {deleteSnippet !== undefined && (
-        <>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <IconButton
             aria-label="edit"
             onClick={() => navigate("/edit", { state: { snippet: snippet } })}
@@ -28,7 +27,7 @@ const Snippet = ({ snippet, deleteSnippet }) => {
           >
             <DeleteIcon color={"error"} />
           </IconButton>
-        </>
+        </div>
       )}
     </div>
   );
