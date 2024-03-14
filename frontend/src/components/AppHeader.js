@@ -13,7 +13,9 @@ const AppHeader = ({ isLoggedIn, handleDeleteAll, handleLogout }) => {
           />
         </div>
       )}
-      <h1>Code-Sharing Platform</h1>
+      <a href={"/home"}>
+        <h1>Code-Sharing Platform</h1>
+      </a>
     </header>
   );
 };
