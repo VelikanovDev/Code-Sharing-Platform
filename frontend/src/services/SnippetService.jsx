@@ -26,10 +26,11 @@ export const login = async (userData) => {
 
     // Check for a successful response (status code 200)
     if (response.status === 200) {
-      const { username, token } = response.data;
+      const { username, token, role } = response.data;
+      console.log(response.data);
       localStorage.setItem("username", username);
       localStorage.setItem("token", token); // Save the token
-      localStorage.setItem("role", "ADMIN");
+      localStorage.setItem("role", role);
       return true;
     } else {
       console.error("Login failed:", response.data);
@@ -46,8 +47,6 @@ export const login = async (userData) => {
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/register`, userData);
-    // const { token } = response.data;
-    // localStorage.setItem("token", token); // Store the token upon successful registration
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -80,6 +79,24 @@ export const addNewSnippet = async (username, snippetText) => {
     );
   }
 };
+
+// export const showUsers = async () => {
+//   const token = localStorage.getItem("token");
+//
+//   try {
+//     const response = await axios.get(`${API_BASE_URL}/api/code/users`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     throw new Error(
+//       error.response ? error.response.data.message : error.message,
+//     );
+//   }
+// };
 
 export const deleteSnippet = async (snippetId) => {
   const token = localStorage.getItem("token");
