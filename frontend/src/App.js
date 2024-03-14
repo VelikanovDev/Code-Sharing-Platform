@@ -12,13 +12,13 @@ import RegisterPage from "./pages/RegisterPage";
 import {
   createBrowserRouter,
   Navigate,
-  Outlet,
   RouterProvider,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import NewSnippetPage from "./pages/NewSnippetPage";
 import EditPage from "./pages/EditPage";
-import AppHeader from "./components/AppHeader";
+import UsersPage from "./pages/UsersPage";
+import Layout from "./components/Layout";
 function App() {
   const [snippets, setSnippets] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -122,7 +122,13 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Outlet />, // Serves as a placeholder for nested routes
+      element: (
+        <Layout
+          isLoggedIn={isLoggedIn}
+          handleLogout={handleLogout}
+          handleDeleteAll={handleDeleteAll}
+        />
+      ),
       children: [
         {
           path: "/",
@@ -134,7 +140,11 @@ function App() {
         },
         {
           path: "login",
-          element: <LoginPage onLoginSuccess={handleLoginSuccess} />,
+          element: isLoggedIn ? (
+            <Navigate to="/home" replace />
+          ) : (
+            <LoginPage onLoginSuccess={handleLoginSuccess} />
+          ),
         },
         { path: "register", element: <RegisterPage /> },
         {
@@ -169,25 +179,20 @@ function App() {
             </ProtectedRoute>
           ),
         },
-        // {
-        //   path: "users",
-        //   element: (
-        //     <ProtectedRoute>
-        //       <UsersPage />
-        //     </ProtectedRoute>
-        //   ),
-        // },
+        {
+          path: "users",
+          element: (
+            <ProtectedRoute>
+              <UsersPage />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
   ]);
 
   return (
     <div className="App">
-      <AppHeader
-        isLoggedIn={isLoggedIn}
-        deleteAll={handleDeleteAll}
-        logout={handleLogout}
-      />
       <RouterProvider router={router} />
     </div>
   );
