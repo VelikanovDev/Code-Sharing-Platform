@@ -7,15 +7,15 @@ import { Outlet } from "react-router-dom";
  * It renders the AppHeader component and an Outlet for nested routes.
  *
  */
-const Layout = ({ isLoggedIn, deleteAll, logout }) => {
+const Layout = ({ isLoggedIn, userdata, handleDeleteAll, handleLogout }) => {
   return (
     <>
       <AppHeader
         isLoggedIn={isLoggedIn}
-        username={localStorage.getItem("username")}
-        role={localStorage.getItem("role")}
-        deleteAll={deleteAll}
-        logout={logout}
+        username={userdata.username}
+        role={userdata.role}
+        deleteAll={handleDeleteAll}
+        logout={handleLogout}
       />
       <Outlet />
     </>

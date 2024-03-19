@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const API_BASE_URL = "http://localhost:8080";
 export const fetchSnippets = async () => {
@@ -27,10 +28,7 @@ export const login = async (userData) => {
     // Check for a successful response (status code 200)
     if (response.status === 200) {
       const { username, token, role } = response.data;
-      console.log(response.data);
-      localStorage.setItem("username", username);
-      localStorage.setItem("token", token); // Save the token
-      localStorage.setItem("role", role);
+      localStorage.setItem("token", token);
       return true;
     } else {
       console.error("Login failed:", response.data);
@@ -42,6 +40,14 @@ export const login = async (userData) => {
     );
     return false;
   }
+};
+
+export const getUsernameAndRoleFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    return jwtDecode(token);
+  }
+  return null; // No token or role found
 };
 
 export const registerUser = async (userData) => {

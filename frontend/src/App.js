@@ -6,6 +6,7 @@ import {
   deleteSnippet,
   editSnippet,
   fetchSnippets,
+  getUsernameAndRoleFromToken,
 } from "./services/SnippetService";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -19,16 +20,26 @@ import NewSnippetPage from "./pages/NewSnippetPage";
 import EditPage from "./pages/EditPage";
 import UsersPage from "./pages/UsersPage";
 import Layout from "./components/Layout";
+
 function App() {
   const [snippets, setSnippets] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [refreshSnippets, setRefreshSnippets] = useState(false);
+  const [userData, setUserData] = useState({ username: null, role: null });
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedIn);
 
     if (loggedIn) {
+      if (userData.username === null) {
+        const data = getUsernameAndRoleFromToken();
+
+        if (data) {
+          setUserData({ username: data.username, role: data.role });
+        }
+      }
+
       fetchSnippets()
         .then((res) => {
           setSnippets(res);
@@ -100,6 +111,7 @@ function App() {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
+    setUserData({ username: null, role: null });
   };
 
   const handleEditSnippet = async (snippet) => {
@@ -124,6 +136,7 @@ function App() {
       path: "/",
       element: (
         <Layout
+          userdata={userData}
           isLoggedIn={isLoggedIn}
           handleLogout={handleLogout}
           handleDeleteAll={handleDeleteAll}
@@ -152,8 +165,8 @@ function App() {
           element: (
             <ProtectedRoute>
               <HomePage
-                username={localStorage.getItem("username")}
-                role={localStorage.getItem("role")}
+                username={userData.username}
+                role={userData.role}
                 snippetList={snippets}
                 editSnippet={handleEditSnippet}
                 deleteSnippet={handleDeleteSnippet}
