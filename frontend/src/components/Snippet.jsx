@@ -12,6 +12,7 @@ const Snippet = ({ snippet, deleteSnippet }) => {
     <div className={"snippet"}>
       <h3>Author: {snippet.user.username}</h3>
       <h3>Date: {snippet.date}</h3>
+      {snippet.editDate == null ? null : <h3>Edited at: {snippet.editDate}</h3>}
       <pre className={"snippet_code"}>
         <SyntaxHighlighter language="javascript" style={docco}>
           {snippet.code}
