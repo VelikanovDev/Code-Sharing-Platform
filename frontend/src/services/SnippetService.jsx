@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const API_BASE_URL = "http://localhost:8080";
 export const fetchSnippets = async () => {
@@ -26,11 +27,8 @@ export const login = async (userData) => {
 
     // Check for a successful response (status code 200)
     if (response.status === 200) {
-      const { username, token, role } = response.data;
-      console.log(response.data);
-      localStorage.setItem("username", username);
-      localStorage.setItem("token", token); // Save the token
-      localStorage.setItem("role", role);
+      const { token } = response.data;
+      localStorage.setItem("token", token);
       return true;
     } else {
       console.error("Login failed:", response.data);
@@ -42,6 +40,14 @@ export const login = async (userData) => {
     );
     return false;
   }
+};
+
+export const getUsernameAndRoleFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    return jwtDecode(token);
+  }
+  return null; // No token or role found
 };
 
 export const registerUser = async (userData) => {
@@ -71,32 +77,31 @@ export const addNewSnippet = async (username, snippetText) => {
         },
       },
     );
-    return response.data; // Return the response data to be used in .then()
+    return `Snippet with id ${response.data.id} was successfully added`;
   } catch (error) {
-    // Throwing an error to be caught by .catch() in the calling function
     throw new Error(
       error.response ? error.response.data.message : error.message,
     );
   }
 };
 
-// export const showUsers = async () => {
-//   const token = localStorage.getItem("token");
-//
-//   try {
-//     const response = await axios.get(`${API_BASE_URL}/api/code/users`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(
-//       error.response ? error.response.data.message : error.message,
-//     );
-//   }
-// };
+export const fetchUsers = async () => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/code/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : error.message,
+    );
+  }
+};
 
 export const deleteSnippet = async (snippetId) => {
   const token = localStorage.getItem("token");
@@ -140,7 +145,6 @@ export const deleteAllSnippets = async () => {
 
 export const editSnippet = async (snippet) => {
   const token = localStorage.getItem("token");
-  console.log(snippet);
   try {
     const response = await axios.post(
       `${API_BASE_URL}/api/code/edit/${snippet.id}`,
@@ -153,7 +157,6 @@ export const editSnippet = async (snippet) => {
       },
     );
 
-    console.log(`In edit snippet: ${response.data}`);
     return response.data;
   } catch (error) {
     throw new Error(
@@ -161,18 +164,3 @@ export const editSnippet = async (snippet) => {
     );
   }
 };
-//
-// // Setup Axios to automatically include the JWT in every request
-// export const setAuthToken = (token) => {
-//     if (token) {
-//         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-//     } else {
-//         delete axios.defaults.headers.common['Authorization'];
-//     }
-// };
-//
-// // You might want to call this function when your app starts to ensure the token is set
-// export const loadAuthToken = () => {
-//     const token = localStorage.getItem("token");
-//     setAuthToken(token);
-// };

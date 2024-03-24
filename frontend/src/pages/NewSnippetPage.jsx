@@ -9,7 +9,6 @@ const NewSnippetPage = ({ addNewSnippet }) => {
     event.preventDefault();
     try {
       await addNewSnippet(snippetText);
-      console.log("Snippet added successfully", snippetText);
       navigate("/home");
     } catch (error) {
       console.error("Failed to add new snippet", error);

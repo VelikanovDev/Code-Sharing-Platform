@@ -6,29 +6,40 @@ import {
   deleteSnippet,
   editSnippet,
   fetchSnippets,
+  getUsernameAndRoleFromToken,
 } from "./services/SnippetService";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import {
   createBrowserRouter,
   Navigate,
-  Outlet,
   RouterProvider,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import NewSnippetPage from "./pages/NewSnippetPage";
 import EditPage from "./pages/EditPage";
-import AppHeader from "./components/AppHeader";
+import UsersPage from "./pages/UsersPage";
+import Layout from "./components/Layout";
+
 function App() {
   const [snippets, setSnippets] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [refreshSnippets, setRefreshSnippets] = useState(false);
+  const [userData, setUserData] = useState({ username: null, role: null });
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedIn);
 
     if (loggedIn) {
+      if (userData.username === null) {
+        const data = getUsernameAndRoleFromToken();
+
+        if (data) {
+          setUserData({ username: data.username, role: data.role });
+        }
+      }
+
       fetchSnippets()
         .then((res) => {
           setSnippets(res);
@@ -41,7 +52,7 @@ function App() {
           }
         });
     }
-  }, [refreshSnippets]);
+  }, [refreshSnippets, userData.username]);
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
@@ -51,10 +62,7 @@ function App() {
 
   const handleAddNewSnippet = async (snippetText) => {
     try {
-      const result = await addNewSnippet(
-        localStorage.getItem("username"),
-        snippetText,
-      );
+      const result = await addNewSnippet(userData.username, snippetText);
       setRefreshSnippets(true);
       console.log(result);
     } catch (error) {
@@ -100,6 +108,7 @@ function App() {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
+    setUserData({ username: null, role: null });
   };
 
   const handleEditSnippet = async (snippet) => {
@@ -122,7 +131,14 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Outlet />, // Serves as a placeholder for nested routes
+      element: (
+        <Layout
+          userdata={userData}
+          isLoggedIn={isLoggedIn}
+          handleLogout={handleLogout}
+          handleDeleteAll={handleDeleteAll}
+        />
+      ),
       children: [
         {
           path: "/",
@@ -134,7 +150,11 @@ function App() {
         },
         {
           path: "login",
-          element: <LoginPage onLoginSuccess={handleLoginSuccess} />,
+          element: isLoggedIn ? (
+            <Navigate to="/home" replace />
+          ) : (
+            <LoginPage onLoginSuccess={handleLoginSuccess} />
+          ),
         },
         { path: "register", element: <RegisterPage /> },
         {
@@ -142,8 +162,8 @@ function App() {
           element: (
             <ProtectedRoute>
               <HomePage
-                username={localStorage.getItem("username")}
-                role={localStorage.getItem("role")}
+                username={userData.username}
+                role={userData.role}
                 snippetList={snippets}
                 editSnippet={handleEditSnippet}
                 deleteSnippet={handleDeleteSnippet}
@@ -169,25 +189,20 @@ function App() {
             </ProtectedRoute>
           ),
         },
-        // {
-        //   path: "users",
-        //   element: (
-        //     <ProtectedRoute>
-        //       <UsersPage />
-        //     </ProtectedRoute>
-        //   ),
-        // },
+        {
+          path: "users",
+          element: (
+            <ProtectedRoute>
+              <UsersPage />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
   ]);
 
   return (
     <div className="App">
-      <AppHeader
-        isLoggedIn={isLoggedIn}
-        deleteAll={handleDeleteAll}
-        logout={handleLogout}
-      />
       <RouterProvider router={router} />
     </div>
   );

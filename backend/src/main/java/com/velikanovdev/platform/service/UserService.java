@@ -60,6 +60,10 @@ public class UserService {
         return userMapper.toUserDto(savedUser);
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public User findByUsername(String username) {
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));

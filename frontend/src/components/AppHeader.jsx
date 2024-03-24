@@ -1,13 +1,14 @@
 import React from "react";
 import AccountMenu from "./AccountMenu";
 
-const AppHeader = ({ isLoggedIn, deleteAll, logout }) => {
+const AppHeader = ({ isLoggedIn, username, role, deleteAll, logout }) => {
   return (
     <header className="AppHeader">
       {isLoggedIn && (
         <div className={"AccountMenu"}>
           <AccountMenu
-            username={localStorage.getItem("username")}
+            username={username}
+            role={role}
             deleteAll={deleteAll}
             logout={logout}
           />

@@ -29,7 +29,7 @@ public class PlatformApiController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> addCode(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<?> addSnippet(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
         String code = payload.get("code");
 
@@ -62,12 +62,17 @@ public class PlatformApiController {
             return ResponseEntity.notFound().build();
         }
 
-        s.setDate(LocalDateTime.now());
-        s.setCode(snippet.getCode());
+        s.setEditDate(LocalDateTime.now());
+        s.setCode(snippet.code());
 
         platformService.addOrUpdateSnippet(s);
 
         return ResponseEntity.ok().body(s);
+    }
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @DeleteMapping(path = "/delete", produces = "application/json")
@@ -86,6 +91,6 @@ public class PlatformApiController {
 
     private SnippetDto convertToDTO(Snippet snippet) {
         UserDto userDTO = new UserDto(snippet.getUser().getId(), snippet.getUser().getUsername(), snippet.getUser().getRole());
-        return new SnippetDto(snippet.getId(), snippet.getCode(), snippet.getDate(), userDTO);
+        return new SnippetDto(snippet.getId(), snippet.getCode(), snippet.getEditDate(), snippet.getDate(), userDTO);
     }
 }
