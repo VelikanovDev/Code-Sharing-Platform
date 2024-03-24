@@ -95,13 +95,15 @@ function App() {
   };
 
   const handleDeleteAll = async () => {
-    try {
-      const result = await deleteAllSnippets();
-      setRefreshSnippets(true);
-      console.log(result);
-    } catch (error) {
-      console.error("Error in handleAddNewSnippet", error);
-      throw error; // Rethrow if you want calling context to handle it
+    if (window.confirm("Do you really want to delete all snippets?")) {
+      try {
+        const result = await deleteAllSnippets();
+        setRefreshSnippets(true);
+        console.log(result);
+      } catch (error) {
+        console.error("Error in handleAddNewSnippet", error);
+        throw error; // Rethrow if you want calling context to handle it
+      }
     }
   };
 
