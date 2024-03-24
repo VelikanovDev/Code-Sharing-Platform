@@ -27,7 +27,7 @@ export const login = async (userData) => {
 
     // Check for a successful response (status code 200)
     if (response.status === 200) {
-      const { username, token, role } = response.data;
+      const { token } = response.data;
       localStorage.setItem("token", token);
       return true;
     } else {
@@ -77,9 +77,8 @@ export const addNewSnippet = async (username, snippetText) => {
         },
       },
     );
-    return response.data; // Return the response data to be used in .then()
+    return `Snippet with id ${response.data.id} was successfully added`;
   } catch (error) {
-    // Throwing an error to be caught by .catch() in the calling function
     throw new Error(
       error.response ? error.response.data.message : error.message,
     );
@@ -146,7 +145,6 @@ export const deleteAllSnippets = async () => {
 
 export const editSnippet = async (snippet) => {
   const token = localStorage.getItem("token");
-  console.log(snippet);
   try {
     const response = await axios.post(
       `${API_BASE_URL}/api/code/edit/${snippet.id}`,

@@ -52,7 +52,7 @@ function App() {
           }
         });
     }
-  }, [refreshSnippets]);
+  }, [refreshSnippets, userData.username]);
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
@@ -62,10 +62,7 @@ function App() {
 
   const handleAddNewSnippet = async (snippetText) => {
     try {
-      const result = await addNewSnippet(
-        localStorage.getItem("username"),
-        snippetText,
-      );
+      const result = await addNewSnippet(userData.username, snippetText);
       setRefreshSnippets(true);
       console.log(result);
     } catch (error) {
