@@ -85,23 +85,23 @@ export const addNewSnippet = async (username, snippetText) => {
   }
 };
 
-// export const showUsers = async () => {
-//   const token = localStorage.getItem("token");
-//
-//   try {
-//     const response = await axios.get(`${API_BASE_URL}/api/code/users`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json",
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(
-//       error.response ? error.response.data.message : error.message,
-//     );
-//   }
-// };
+export const fetchUsers = async () => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/code/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : error.message,
+    );
+  }
+};
 
 export const deleteSnippet = async (snippetId) => {
   const token = localStorage.getItem("token");
@@ -157,7 +157,6 @@ export const editSnippet = async (snippet) => {
       },
     );
 
-    console.log(`In edit snippet: ${response.data}`);
     return response.data;
   } catch (error) {
     throw new Error(
@@ -165,18 +164,3 @@ export const editSnippet = async (snippet) => {
     );
   }
 };
-//
-// // Setup Axios to automatically include the JWT in every request
-// export const setAuthToken = (token) => {
-//     if (token) {
-//         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-//     } else {
-//         delete axios.defaults.headers.common['Authorization'];
-//     }
-// };
-//
-// // You might want to call this function when your app starts to ensure the token is set
-// export const loadAuthToken = () => {
-//     const token = localStorage.getItem("token");
-//     setAuthToken(token);
-// };
