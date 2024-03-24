@@ -27,6 +27,10 @@ h2 {
   text-align: center;
 }
 
+h3 {
+  color: #007bff;
+}
+
 .AccountMenu {
   position: absolute;
   left: 88%;

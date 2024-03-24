@@ -2,6 +2,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const Snippet = ({ snippet, deleteSnippet }) => {
   const navigate = useNavigate();
@@ -11,7 +13,9 @@ const Snippet = ({ snippet, deleteSnippet }) => {
       <h3>Author: {snippet.user.username}</h3>
       <h3>Date: {snippet.date}</h3>
       <pre className={"snippet_code"}>
-        <code>{snippet.code}</code>
+        <SyntaxHighlighter language="javascript" style={docco}>
+          {snippet.code}
+        </SyntaxHighlighter>
       </pre>
       {deleteSnippet !== undefined && (
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
