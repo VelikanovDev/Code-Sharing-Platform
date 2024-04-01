@@ -1,3 +1,4 @@
+import CommentIcon from "@mui/icons-material/Comment";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
@@ -20,6 +21,13 @@ const Snippet = ({ snippet, deleteSnippet }) => {
       </pre>
       {deleteSnippet !== undefined && (
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton
+            aria-label="comment"
+            onClick={() => console.log("comment click")}
+          >
+            <CommentIcon color={"primary"} />
+          </IconButton>
+
           <IconButton
             aria-label="edit"
             onClick={() => navigate("/edit", { state: { snippet: snippet } })}
