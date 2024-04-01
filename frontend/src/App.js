@@ -26,6 +26,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [refreshSnippets, setRefreshSnippets] = useState(false);
   const [userData, setUserData] = useState({ username: null, role: null });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -40,6 +41,7 @@ function App() {
         }
       }
 
+      setIsLoading(true);
       fetchSnippets()
         .then((res) => {
           setSnippets(res);
@@ -50,7 +52,8 @@ function App() {
           if (err.response && err.response.status === 401) {
             handleLogout();
           }
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [refreshSnippets, userData.username]);
 
@@ -167,10 +170,8 @@ function App() {
                 username={userData.username}
                 role={userData.role}
                 snippetList={snippets}
-                editSnippet={handleEditSnippet}
                 deleteSnippet={handleDeleteSnippet}
-                deleteAll={handleDeleteAll}
-                logout={handleLogout}
+                isLoading={isLoading}
               />
             </ProtectedRoute>
           ),
