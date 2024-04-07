@@ -2,6 +2,7 @@ package com.velikanovdev.platform.controller;
 
 import com.velikanovdev.platform.dto.SnippetDto;
 import com.velikanovdev.platform.dto.UserDto;
+import com.velikanovdev.platform.entity.Comment;
 import com.velikanovdev.platform.entity.Snippet;
 import com.velikanovdev.platform.entity.User;
 import com.velikanovdev.platform.service.PlatformService;
@@ -89,8 +90,36 @@ public class PlatformApiController {
         return ResponseEntity.ok("Snippet has been deleted");
     }
 
+    @PostMapping(path = "/comment/add/{id}", produces = "application/json")
+    public ResponseEntity<Comment> addComment(@PathVariable Long id, @RequestBody Comment comment) {
+        log.info("Adding comment to the snippet with id " + id);
+
+        Snippet snippet = platformService.getSnippet(id);
+
+        if(snippet == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        comment.setDate(LocalDateTime.now());
+        comment.setSnippet(snippet);
+
+        Comment addedComment = platformService.addComment(comment);
+
+        return ResponseEntity.ok().body(addedComment);
+    }
+
+    @DeleteMapping(path = "/comment/delete/{id}", produces = "application/json")
+    public ResponseEntity<String> deleteComment(@PathVariable Long id) {
+        log.info("Deleting comment with id " + id);
+        platformService.deleteComment(id);
+
+        return ResponseEntity.ok("Comment has been deleted");
+    }
+
+
     private SnippetDto convertToDTO(Snippet snippet) {
         UserDto userDTO = new UserDto(snippet.getUser().getId(), snippet.getUser().getUsername(), snippet.getUser().getRole());
-        return new SnippetDto(snippet.getId(), snippet.getCode(), snippet.getEditDate(), snippet.getDate(), userDTO);
+        return new SnippetDto(snippet.getId(), snippet.getCode(), snippet.getEditDate(),
+                snippet.getDate(), userDTO, snippet.getComments());
     }
 }

@@ -1,10 +1,14 @@
 package com.velikanovdev.platform.service.impl;
 
+import com.velikanovdev.platform.entity.Comment;
 import com.velikanovdev.platform.entity.Snippet;
+import com.velikanovdev.platform.exception.AppException;
+import com.velikanovdev.platform.repository.CommentRepository;
 import com.velikanovdev.platform.repository.PlatformRepository;
 import com.velikanovdev.platform.service.PlatformService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +19,17 @@ import java.util.stream.Collectors;
 @Service
 public class PlatformServiceImpl implements PlatformService {
     private final PlatformRepository platformRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public PlatformServiceImpl(PlatformRepository platformRepository) {
+    public PlatformServiceImpl(PlatformRepository platformRepository, CommentRepository commentRepository) {
         this.platformRepository = platformRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
     public Snippet getSnippet(Long id) {
-        Optional<Snippet> optionalCodeEntity = platformRepository.findById(id.intValue());
+        Optional<Snippet> optionalCodeEntity = platformRepository.findById(id);
         return optionalCodeEntity.orElse(null);
     }
 
@@ -36,7 +42,7 @@ public class PlatformServiceImpl implements PlatformService {
 
         } else {
             log.info("PlatformServiceImpl: before updating a snippet");
-            Snippet existingSnippet = platformRepository.findById(snippet.getId().intValue()).orElseThrow();
+            Snippet existingSnippet = platformRepository.findById(snippet.getId()).orElseThrow();
             snippet.setId(existingSnippet.getId());
             Snippet s = platformRepository.save(snippet);
             return s.getId();
@@ -55,11 +61,26 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Override
     public void deleteSnippet(Long id) {
-        platformRepository.deleteById(id.intValue());
+        platformRepository.findById(id)
+                .orElseThrow(() -> new AppException("Snippet not found with ID: " + id, HttpStatus.BAD_REQUEST));
+        platformRepository.deleteById(id);
     }
 
     @Override
     public void deleteAllSnippets() {
         platformRepository.deleteAll();
+    }
+
+    @Override
+    public Comment addComment(Comment comment) {
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    public void deleteComment(Long id) {
+        commentRepository.findById(id)
+                .orElseThrow(() -> new AppException("Comment not found with ID: " + id, HttpStatus.BAD_REQUEST));
+
+        commentRepository.deleteById(id);
     }
 }
