@@ -1,8 +1,10 @@
 import "./styles/App.css";
 import React, { useEffect, useState } from "react";
 import {
+  addComment,
   addNewSnippet,
   deleteAllSnippets,
+  deleteComment,
   deleteSnippet,
   editSnippet,
   fetchSnippets,
@@ -74,18 +76,6 @@ function App() {
     }
   };
 
-  // const handleShowUsers = async () => {
-  //   <Navigate to={"/users"} />;
-  //   // try {
-  //   //   const result = await showUsers();
-  //   //   setRefreshSnippets(true);
-  //   //   console.log(result);
-  //   // } catch (error) {
-  //   //   console.error("Error in handleShowUsers", error);
-  //   //   throw error;
-  //   // }
-  // };
-
   const handleDeleteSnippet = async (snippetId) => {
     try {
       const result = await deleteSnippet(snippetId);
@@ -127,7 +117,30 @@ function App() {
     }
   };
 
-  // A wrapper or layout component that checks for isLoggedIn state
+  const handleAddComment = async (snippetId, commentText) => {
+    try {
+      const newComment = await addComment(
+        userData.username,
+        snippetId,
+        commentText,
+      );
+      return newComment;
+    } catch (error) {
+      console.error("Error in handleAddComment", error);
+      throw error;
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const result = deleteComment(commentId);
+      console.log(result);
+    } catch (error) {
+      console.error("Error in handleDeleteComment", error);
+      throw error;
+    }
+  };
+
   const ProtectedRoute = ({ children }) => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true";
     return loggedIn ? children : <Navigate to="/login" replace />;
@@ -171,6 +184,8 @@ function App() {
                 role={userData.role}
                 snippetList={snippets}
                 deleteSnippet={handleDeleteSnippet}
+                addComment={handleAddComment}
+                deleteComment={handleDeleteComment}
                 isLoading={isLoading}
               />
             </ProtectedRoute>
