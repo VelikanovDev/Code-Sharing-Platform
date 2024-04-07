@@ -30,6 +30,8 @@ const HomePage = (props) => {
           role={props.role}
           snippets={props.snippetList}
           deleteSnippet={props.deleteSnippet}
+          addComment={props.addComment}
+          deleteComment={props.deleteComment}
         />
       ) : (
         <p>There are no snippets yet. Be the first one!</p>

@@ -1,22 +1,28 @@
 import Snippet from "./Snippet";
 import React from "react";
 
-const SnippetList = ({ username, snippets, editSnippet, deleteSnippet }) => {
+const SnippetList = ({
+  username,
+  role,
+  snippets,
+  deleteSnippet,
+  addComment,
+  deleteComment,
+}) => {
   return (
     <div className={"snippetList"}>
       {snippets.map((s) => {
-        if (s.user.username === username) {
-          return (
-            <Snippet
-              key={s.id}
-              snippet={s}
-              editSnippet={editSnippet}
-              deleteSnippet={deleteSnippet}
-            ></Snippet>
-          );
-        } else {
-          return <Snippet key={s.id} snippet={s}></Snippet>;
-        }
+        return (
+          <Snippet
+            key={s.id}
+            username={username}
+            role={role}
+            snippet={s}
+            deleteSnippet={deleteSnippet}
+            addComment={addComment}
+            deleteComment={deleteComment}
+          ></Snippet>
+        );
       })}
     </div>
   );
