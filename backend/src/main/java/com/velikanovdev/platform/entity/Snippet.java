@@ -1,5 +1,6 @@
 package com.velikanovdev.platform.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,17 +39,6 @@ public class Snippet {
     @JsonIgnore
     private User user;
 
-    @Transient
-    @JsonIgnore
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-    public String getDate() {
-        return date.format(formatter);
-    }
-
-    public String getEditDate() {
-        if (this.editDate == null) return null;
-        return editDate.format(formatter);
-    }
-
+    @OneToMany(mappedBy = "snippet", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }
