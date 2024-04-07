@@ -164,3 +164,47 @@ export const editSnippet = async (snippet) => {
     );
   }
 };
+
+export const addComment = async (username, snippetId, text) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/code/comment/add/${snippetId}`,
+      {
+        username,
+        text,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : error.message,
+    );
+  }
+};
+
+export const deleteComment = async (commentId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}/api/code/comment/delete/${commentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : error.message,
+    );
+  }
+};
