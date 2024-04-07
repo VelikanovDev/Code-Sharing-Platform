@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PlatformRepository extends JpaRepository<Snippet, Integer> {
+public interface PlatformRepository extends JpaRepository<Snippet, Long> {
     List<Snippet> findAllByOrderByDateDesc();
 }
