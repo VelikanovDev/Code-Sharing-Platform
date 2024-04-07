@@ -67,6 +67,7 @@ h3 {
 form, p {
   text-align: center;
 }
+
 .newSnippet #titleInput {
   width: 100%;
   padding: 10px;
@@ -97,6 +98,12 @@ hr {
   width: 70%;
   justify-content: center;
   margin: 0 auto;
+}
+
+.snippet {
+  background-color: #f5f5f5;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 .snippet_code {
@@ -135,4 +142,51 @@ hr {
   padding-top: 12px;
   padding-bottom: 12px;
   background-color: #f2f2f2;
+}
+
+.comment-section {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.comment-section h4 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.comment-section h5 {
+  color: #007bff;
+  margin: 0;
+}
+
+.comment {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  position: relative;
+}
+
+.comment p {
+  margin: 0;
+  text-align: left;
+  font-weight: bold;
+}
+
+.comment-author {
+  font-weight: bold;
+}
+
+.comment-text {
+  font-style: italic;
+}
+
+#commentInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
 }
