@@ -28,6 +28,8 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "api/code/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "api/code/users").hasRole("ADMIN")
                         .anyRequest().authenticated())
         ;
         return http.build();
