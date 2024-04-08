@@ -5,31 +5,36 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.velikanovdev.platform.dto.UserDto;
-import com.velikanovdev.platform.service.UserService;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Date;
 
-@RequiredArgsConstructor
 @Component
 public class UserAuthenticationProvider {
 
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
+    private Algorithm algorithm;
+    private final UserDetailsService userDetailsService;
 
-    private final UserService userService;
+    @Autowired
+    public UserAuthenticationProvider(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @PostConstruct
     protected void init() {
         // this is to avoid having the raw secret key available in the JVM
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        algorithm = Algorithm.HMAC256(secretKey);
     }
 
     public String createToken(UserDto user) {
@@ -47,31 +52,17 @@ public class UserAuthenticationProvider {
     }
 
     public Authentication validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decoded;
+        try {
+            decoded = verifier.verify(token);
+        } catch (Exception e) {
+            throw new RuntimeException("Token validation failed");
+        }
 
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(decoded.getSubject());
 
-        DecodedJWT decoded = verifier.verify(token);
-
-        UserDto user = UserDto.builder()
-                .username(decoded.getSubject())
-                .build();
-
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-
-//    public Authentication validateTokenStrongly(String token) {
-//        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-//
-//        JWTVerifier verifier = JWT.require(algorithm)
-//                .build();
-//
-//        DecodedJWT decoded = verifier.verify(token);
-//
-//        UserDto user = userService.findByUsername(decoded.getSubject());
-//
-//        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-//    }
 
 }
