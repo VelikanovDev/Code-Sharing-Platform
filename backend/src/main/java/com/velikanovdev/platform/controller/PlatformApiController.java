@@ -1,5 +1,6 @@
 package com.velikanovdev.platform.controller;
 
+import com.velikanovdev.platform.dto.SnippetCodeDto;
 import com.velikanovdev.platform.dto.SnippetDto;
 import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.Comment;
@@ -10,11 +11,12 @@ import com.velikanovdev.platform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,22 +31,20 @@ public class PlatformApiController {
         this.userService = userService;
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<?> addSnippet(@RequestBody Map<String, String> payload) {
-        String username = payload.get("username");
-        String code = payload.get("code");
-
+    @PostMapping(path ="/new", produces = "application/json")
+    public ResponseEntity<String> addSnippet(@AuthenticationPrincipal UserDetails userDetails,
+                                        @RequestBody SnippetCodeDto snippetCodeDto) {
+        String username = userDetails.getUsername();
         User user = userService.findByUsername(username);
-        log.info("Username: " + user.getUsername());
 
         Snippet snippet = new Snippet();
-        snippet.setCode(code);
+        snippet.setCode(snippetCodeDto.code());
         snippet.setDate(LocalDateTime.now());
         snippet.setUser(user);
 
         String id = String.valueOf(platformService.addOrUpdateSnippet(snippet));
 
-        return ResponseEntity.ok(Map.of("id", id));
+        return ResponseEntity.ok("Snippet successfully added with ID: " + id);
     }
 
     @GetMapping("/latest")
