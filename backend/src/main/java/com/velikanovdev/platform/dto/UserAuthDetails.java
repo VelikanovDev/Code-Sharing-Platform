@@ -10,16 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class UserAuthDetails {
     private Long id;
     private String username;
     private Role role;
     private String token;
-
-    public UserDto(Long id, String username, Role role) {
-        this.id = id;
-        this.username = username;
-        this.role = role;
-        this.token = null;
-    }
 }
