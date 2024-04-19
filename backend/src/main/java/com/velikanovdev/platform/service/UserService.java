@@ -4,9 +4,9 @@ import com.velikanovdev.platform.dto.UserAuthDetails;
 import com.velikanovdev.platform.dto.UserCredentials;
 import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.User;
-import com.velikanovdev.platform.enums.Role;
 import com.velikanovdev.platform.exception.AppException;
 import com.velikanovdev.platform.mappers.UserMapper;
+import com.velikanovdev.platform.repository.RoleRepository;
 import com.velikanovdev.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
 
     public UserAuthDetails login(UserCredentials userCredentials) {
@@ -39,16 +40,18 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUsername(userCredentials.username());
 
         if (optionalUser.isPresent()) {
-            throw new AppException("User with login " + userCredentials.username() + " already exists", HttpStatus.BAD_REQUEST);
+            throw new AppException("User with login " + userCredentials.username() + " already exists", HttpStatus.CONFLICT);
         }
 
         User user = UserMapper.INSTANCE.signUpToUser(userCredentials);
 
         if(userRepository.findAll().isEmpty()) {
-            user.setRole(Role.ADMIN);
+            user.setRole(roleRepository.findByName("ADMIN")
+                    .orElseThrow(() -> new AppException("Role 'ADMIN' not found", HttpStatus.NOT_FOUND)));
         }
         else {
-            user.setRole(Role.USER);
+            user.setRole(roleRepository.findByName("USER")
+                    .orElseThrow(() -> new AppException("Role 'USER' not found", HttpStatus.NOT_FOUND)));
         }
 
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userCredentials.password())));
