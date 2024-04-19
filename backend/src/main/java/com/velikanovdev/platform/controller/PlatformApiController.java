@@ -49,9 +49,8 @@ public class PlatformApiController {
 
     @GetMapping("/latest")
     public ResponseEntity<List<SnippetDto>> getLatest() {
-        List<Snippet> snippets = platformService.getLatest();
-        List<SnippetDto> dtos = snippets.stream().map(this::convertToDTO).toList();
-        return ResponseEntity.ok(dtos);
+        List<SnippetDto> snippets = platformService.getLatest();
+        return ResponseEntity.ok(snippets);
     }
 
     @PostMapping(path = "/edit/{id}", produces = "application/json")
@@ -72,7 +71,7 @@ public class PlatformApiController {
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
@@ -114,12 +113,5 @@ public class PlatformApiController {
         platformService.deleteComment(id);
 
         return ResponseEntity.ok("Comment has been deleted");
-    }
-
-
-    private SnippetDto convertToDTO(Snippet snippet) {
-        UserDto userDTO = new UserDto(snippet.getUser().getId(), snippet.getUser().getUsername(), snippet.getUser().getRole());
-        return new SnippetDto(snippet.getId(), snippet.getCode(), snippet.getEditDate(),
-                snippet.getDate(), userDTO, snippet.getComments());
     }
 }
