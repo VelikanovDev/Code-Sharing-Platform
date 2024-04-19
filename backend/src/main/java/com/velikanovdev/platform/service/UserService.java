@@ -1,7 +1,7 @@
 package com.velikanovdev.platform.service;
 
-import com.velikanovdev.platform.dto.CredentialsDto;
-import com.velikanovdev.platform.dto.SignUpDto;
+import com.velikanovdev.platform.dto.UserAuthDetails;
+import com.velikanovdev.platform.dto.UserCredentials;
 import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.User;
 import com.velikanovdev.platform.enums.Role;
@@ -20,31 +20,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
-    private final UserMapper userMapper;
 
-    public UserDto login(CredentialsDto credentialsDto) {
-        User user = userRepository.findByUsername(credentialsDto.username())
+    public UserAuthDetails login(UserCredentials userCredentials) {
+        User user = userRepository.findByUsername(userCredentials.username())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.BAD_REQUEST));
 
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-            return userMapper.toUserDto(user);
+        if (passwordEncoder.matches(CharBuffer.wrap(userCredentials.password()), user.getPassword())) {
+            return UserMapper.INSTANCE.toUserAuthDetails(user);
         }
+
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
-    public UserDto register(SignUpDto userDto) {
-        Optional<User> optionalUser = userRepository.findByUsername(userDto.username());
+    public UserAuthDetails register(UserCredentials userCredentials) {
+        Optional<User> optionalUser = userRepository.findByUsername(userCredentials.username());
 
         if (optionalUser.isPresent()) {
-            throw new AppException("User with login " + userDto.username() + " already exists", HttpStatus.BAD_REQUEST);
+            throw new AppException("User with login " + userCredentials.username() + " already exists", HttpStatus.BAD_REQUEST);
         }
 
-        User user = userMapper.signUpToUser(userDto);
+        User user = UserMapper.INSTANCE.signUpToUser(userCredentials);
 
         if(userRepository.findAll().isEmpty()) {
             user.setRole(Role.ADMIN);
@@ -53,15 +51,17 @@ public class UserService {
             user.setRole(Role.USER);
         }
 
-        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userCredentials.password())));
 
         User savedUser = userRepository.save(user);
 
-        return userMapper.toUserDto(savedUser);
+        return UserMapper.INSTANCE.toUserAuthDetails(savedUser);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream().map(UserMapper.INSTANCE::toUserDto).toList();
     }
 
     public User findByUsername(String username) {
