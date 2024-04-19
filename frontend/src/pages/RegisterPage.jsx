@@ -41,18 +41,21 @@ const RegisterPage = () => {
           type="text"
           placeholder="Login"
           value={username}
+          autoComplete={"username"}
           onChange={(e) => setUsername(e.target.value)}
         />
         <MyInput
           type="password"
           placeholder="Password"
           value={password}
+          autoComplete={"new-password"}
           onChange={(e) => setPassword(e.target.value)}
         />
         <MyInput
           type="password"
           placeholder="Confirm password"
           value={confirmPassword}
+          autoComplete={"new-password"}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <MyButton type="submit" value={"Register"} />

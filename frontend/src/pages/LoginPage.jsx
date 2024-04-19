@@ -37,12 +37,14 @@ const LoginPage = ({ onLoginSuccess }) => {
           type="text"
           placeholder="Username"
           value={username}
+          autoComplete={"username"}
           onChange={(e) => setUsername(e.target.value)}
         />
         <MyInput
           type="password"
           placeholder="Password"
           value={password}
+          autoComplete={"current-password"}
           onChange={(e) => setPassword(e.target.value)}
         />
         <MyButton type="submit" value={"Sign In"} />
