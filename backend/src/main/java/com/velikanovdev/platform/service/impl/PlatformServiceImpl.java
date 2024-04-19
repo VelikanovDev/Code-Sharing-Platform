@@ -1,8 +1,10 @@
 package com.velikanovdev.platform.service.impl;
 
+import com.velikanovdev.platform.dto.SnippetDto;
 import com.velikanovdev.platform.entity.Comment;
 import com.velikanovdev.platform.entity.Snippet;
 import com.velikanovdev.platform.exception.AppException;
+import com.velikanovdev.platform.mappers.SnippetMapper;
 import com.velikanovdev.platform.repository.CommentRepository;
 import com.velikanovdev.platform.repository.PlatformRepository;
 import com.velikanovdev.platform.service.PlatformService;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -51,12 +52,11 @@ public class PlatformServiceImpl implements PlatformService {
     }
 
     @Override
-    public List<Snippet> getLatest() {
+    public List<SnippetDto> getLatest() {
         return platformRepository.findAllByOrderByDateDesc()
                 .stream()
-                .sorted((c1, c2) -> c2.getDate().compareTo(c1.getDate()))
-                .limit(10)
-                .collect(Collectors.toList());
+                .map(SnippetMapper.INSTANCE::toSnippetDto)
+                .toList();
     }
 
     @Override
