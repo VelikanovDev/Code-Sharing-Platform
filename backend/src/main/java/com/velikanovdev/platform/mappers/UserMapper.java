@@ -1,17 +1,21 @@
 package com.velikanovdev.platform.mappers;
 
-import com.velikanovdev.platform.dto.SignUpDto;
+import com.velikanovdev.platform.dto.UserAuthDetails;
+import com.velikanovdev.platform.dto.UserCredentials;
 import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface UserMapper {
-    @Mapping(source = "role", target = "role") // This line might be optional if the field names match
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+
     UserDto toUserDto(User user);
 
     @Mapping(target = "password", ignore = true)
-    User signUpToUser(SignUpDto signUpDto);
+    User signUpToUser(UserCredentials registerRequest);
 
+    UserAuthDetails toUserAuthDetails(User user);
 }
