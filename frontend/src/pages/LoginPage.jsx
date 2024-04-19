@@ -12,6 +12,12 @@ const LoginPage = ({ onLoginSuccess }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (username === "" || password === "") {
+      setError("Username and password are required");
+      return;
+    }
+
     const success = await login({ username: username, password: password });
 
     if (success) {
