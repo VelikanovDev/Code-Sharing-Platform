@@ -4,7 +4,7 @@ import com.velikanovdev.platform.dto.UserCredentials;
 import com.velikanovdev.platform.entity.Role;
 import com.velikanovdev.platform.repository.RoleRepository;
 import com.velikanovdev.platform.repository.UserRepository;
-import com.velikanovdev.platform.service.UserService;
+import com.velikanovdev.platform.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements ApplicationRunner {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, UserService userService) {
+    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, UserServiceImpl userServiceImpl) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class DataInitializer implements ApplicationRunner {
         }
 
         if(userRepository.findAll().isEmpty()) {
-            userService.register(new UserCredentials("admin", "admin"));
+            userServiceImpl.register(new UserCredentials("admin", "admin"));
         }
     }
 }
