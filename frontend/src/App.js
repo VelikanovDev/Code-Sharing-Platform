@@ -65,9 +65,9 @@ function App() {
     localStorage.setItem("isLoggedIn", "true");
   };
 
-  const handleAddNewSnippet = async (snippetText) => {
+  const handleAddNewSnippet = async (code) => {
     try {
-      const result = await addNewSnippet(userData.username, snippetText);
+      const result = await addNewSnippet(code);
       setRefreshSnippets(true);
       console.log(result);
     } catch (error) {

@@ -61,14 +61,13 @@ export const registerUser = async (userData) => {
   }
 };
 
-export const addNewSnippet = async (username, snippetText) => {
+export const addNewSnippet = async (code) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
       `${API_BASE_URL}/api/code/new`,
       {
-        username,
-        code: snippetText,
+        code,
       },
       {
         headers: {
