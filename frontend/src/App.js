@@ -146,6 +146,18 @@ function App() {
     return loggedIn ? children : <Navigate to="/login" replace />;
   };
 
+  const RoleProtectedRoute = ({ children }) => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userIsAdmin = userData.role === "ADMIN";
+    if (!isLoggedIn) {
+      return <Navigate to="/login" replace />;
+    } else if (!userIsAdmin) {
+      return <Navigate to="/home" replace />;
+    } else {
+      return children;
+    }
+  };
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -210,9 +222,9 @@ function App() {
         {
           path: "users",
           element: (
-            <ProtectedRoute>
+            <RoleProtectedRoute>
               <UsersPage />
-            </ProtectedRoute>
+            </RoleProtectedRoute>
           ),
         },
       ],
