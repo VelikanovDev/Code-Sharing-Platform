@@ -12,6 +12,4 @@ public interface PlatformService {
     List<SnippetDto> getLatest();
     void deleteSnippet(Long id);
     void deleteAllSnippets();
-    Comment addComment(Comment comment);
-    void deleteComment(Long id);
 }

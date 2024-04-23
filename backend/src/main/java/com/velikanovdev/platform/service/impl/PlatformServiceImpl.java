@@ -70,17 +70,4 @@ public class PlatformServiceImpl implements PlatformService {
     public void deleteAllSnippets() {
         platformRepository.deleteAll();
     }
-
-    @Override
-    public Comment addComment(Comment comment) {
-        return commentRepository.save(comment);
-    }
-
-    @Override
-    public void deleteComment(Long id) {
-        commentRepository.findById(id)
-                .orElseThrow(() -> new AppException("Comment not found with ID: " + id, HttpStatus.BAD_REQUEST));
-
-        commentRepository.deleteById(id);
-    }
 }
