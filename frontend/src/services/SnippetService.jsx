@@ -1,12 +1,13 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 
 const API_BASE_URL = "http://localhost:8080";
 export const fetchSnippets = async () => {
   const token = localStorage.getItem("token"); // Get the token from local storage
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/code/latest`, {
+    const response = await axios.get(`${API_BASE_URL}/snippet/latest`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -65,7 +66,7 @@ export const addNewSnippet = async (code) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/api/code/new`,
+      `${API_BASE_URL}/snippet/new`,
       {
         code,
       },
@@ -88,7 +89,7 @@ export const fetchUsers = async () => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/code/users`, {
+    const response = await axios.get(`${API_BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -106,7 +107,7 @@ export const deleteSnippet = async (snippetId) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.delete(
-      `${API_BASE_URL}/api/code/delete/${snippetId}`,
+      `${API_BASE_URL}/snippet/delete/${snippetId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,7 +128,7 @@ export const deleteAllSnippets = async () => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await axios.delete(`${API_BASE_URL}/api/code/delete`, {
+    const response = await axios.delete(`${API_BASE_URL}/snippet/delete`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -146,7 +147,7 @@ export const editSnippet = async (snippet) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/api/code/edit/${snippet.id}`,
+      `${API_BASE_URL}/snippet/update/${snippet.id}`,
       snippet,
       {
         headers: {
@@ -168,7 +169,7 @@ export const addComment = async (username, snippetId, text) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/api/code/comment/add/${snippetId}`,
+      `${API_BASE_URL}/comment/add/${snippetId}`,
       {
         username,
         text,
@@ -192,7 +193,7 @@ export const deleteComment = async (commentId) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.delete(
-      `${API_BASE_URL}/api/code/comment/delete/${commentId}`,
+      `${API_BASE_URL}/comment/delete/${commentId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
