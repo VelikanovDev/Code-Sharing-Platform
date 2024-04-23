@@ -69,10 +69,4 @@ public class UserServiceImpl implements UserService {
 
         return users.stream().map(UserMapper.INSTANCE::toUserDto).toList();
     }
-
-    @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException("User with username '" + username + "' not found", HttpStatus.NOT_FOUND));
-    }
 }

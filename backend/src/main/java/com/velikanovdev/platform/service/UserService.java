@@ -11,5 +11,4 @@ public interface UserService {
     UserAuthDetails login(UserCredentials userCredentials);
     UserAuthDetails register(UserCredentials userCredentials);
     List<UserDto> getAllUsers();
-    User findByUsername(String username);
 }
