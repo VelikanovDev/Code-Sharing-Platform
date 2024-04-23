@@ -2,7 +2,6 @@ package com.velikanovdev.platform.controller;
 
 import com.velikanovdev.platform.dto.SnippetCodeDto;
 import com.velikanovdev.platform.dto.SnippetDto;
-import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.Snippet;
 import com.velikanovdev.platform.entity.User;
 import com.velikanovdev.platform.service.PlatformService;
@@ -20,12 +19,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/snippet")
-public class PlatformApiController {
+public class SnippetController {
     private final PlatformService platformService;
     private final UserService userService;
 
     @Autowired
-    public PlatformApiController(PlatformService platformService, UserService userService) {
+    public SnippetController(PlatformService platformService, UserService userService) {
         this.platformService = platformService;
         this.userService = userService;
     }
@@ -69,11 +68,6 @@ public class PlatformApiController {
         return ResponseEntity.ok().body(s);
     }
 
-    @GetMapping("/users")
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
     @DeleteMapping(path = "/delete", produces = "application/json")
     public ResponseEntity<String> deleteAllSnippets() {
         log.info("Deleting all snippets");
@@ -87,5 +81,4 @@ public class PlatformApiController {
         platformService.deleteSnippet(id);
         return ResponseEntity.ok("Snippet has been deleted");
     }
-
 }
