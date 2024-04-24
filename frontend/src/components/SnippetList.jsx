@@ -2,8 +2,6 @@ import Snippet from "./Snippet";
 import React from "react";
 
 const SnippetList = ({
-  username,
-  role,
   snippets,
   deleteSnippet,
   addComment,
@@ -15,8 +13,6 @@ const SnippetList = ({
         return (
           <Snippet
             key={s.id}
-            username={username}
-            role={role}
             snippet={s}
             deleteSnippet={deleteSnippet}
             addComment={addComment}
