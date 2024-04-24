@@ -8,20 +8,15 @@ import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import React, { useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import MyButton from "./UI/button/MyButton";
+import { useAuth } from "../provider/AuthProvider";
 
-const Snippet = ({
-  username,
-  role,
-  snippet,
-  deleteSnippet,
-  addComment,
-  deleteComment,
-}) => {
+const Snippet = ({ snippet, deleteSnippet, addComment, deleteComment }) => {
   const [comments, setComments] = useState(snippet.comments);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentError, setCommentError] = useState("");
   const navigate = useNavigate();
+  const { userDetails } = useAuth();
 
   const handleAddComment = async (e) => {
     e.preventDefault();
@@ -61,7 +56,7 @@ const Snippet = ({
           <CommentIcon color={"primary"} />
         </IconButton>
 
-        {snippet.user.username === username && (
+        {snippet.user.username === userDetails.username && (
           <>
             <IconButton
               aria-label="edit"
@@ -77,6 +72,18 @@ const Snippet = ({
             </IconButton>
           </>
         )}
+
+        {userDetails.role === "ADMIN" &&
+          snippet.user.username !== userDetails.username && (
+            <>
+              <IconButton
+                aria-label="delete"
+                onClick={() => deleteSnippet(snippet.id)}
+              >
+                <DeleteIcon color={"error"} />
+              </IconButton>
+            </>
+          )}
       </div>
       {showComments && (
         <div className="comment-section">
@@ -88,7 +95,8 @@ const Snippet = ({
                 <h5>Author: {comment.username}</h5>
                 <h5>Date: {comment.date}</h5>
                 <p>{comment.text}</p>
-                {(comment.username === username || role === "ADMIN") && (
+                {(comment.username === userDetails.username ||
+                  userDetails.role === "ADMIN") && (
                   <IconButton
                     aria-label="delete"
                     onClick={() => handleDeleteComment(comment.id)}
