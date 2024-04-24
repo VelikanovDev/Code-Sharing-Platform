@@ -1,12 +1,25 @@
 import React, { useState } from "react";
 import MyButton from "../components/UI/button/MyButton";
 import { useNavigate } from "react-router-dom";
+import { addNewSnippet } from "../services/SnippetService";
 
-const NewSnippetPage = ({ addNewSnippet }) => {
+const NewSnippetPage = () => {
   const [snippetText, setSnippetText] = useState("");
   const [commentError, setCommentError] = useState("");
 
   const navigate = useNavigate();
+
+  const handleAddNewSnippet = async (code) => {
+    try {
+      const result = await addNewSnippet(code);
+      // setRefreshSnippets(true);
+      console.log(result);
+    } catch (error) {
+      console.error("Error in handleAddNewSnippet", error);
+      throw error;
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -18,7 +31,7 @@ const NewSnippetPage = ({ addNewSnippet }) => {
     }
 
     try {
-      await addNewSnippet(snippetText);
+      await handleAddNewSnippet(snippetText);
       navigate("/home");
     } catch (error) {
       console.error("Failed to add new snippet", error);
