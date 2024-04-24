@@ -1,6 +1,4 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-// import { jwtDecode } from "jwt-decode";
 
 const API_BASE_URL = "http://localhost:8080";
 export const fetchSnippets = async () => {
@@ -30,10 +28,10 @@ export const login = async (userData) => {
     if (response.status === 200) {
       const { token } = response.data;
       localStorage.setItem("token", token);
-      return true;
+      return token;
     } else {
       console.error("Login failed:", response.data);
-      return false;
+      return null;
     }
   } catch (error) {
     console.error(
@@ -41,14 +39,6 @@ export const login = async (userData) => {
     );
     return false;
   }
-};
-
-export const getUsernameAndRoleFromToken = () => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    return jwtDecode(token);
-  }
-  return null; // No token or role found
 };
 
 export const registerUser = async (userData) => {
