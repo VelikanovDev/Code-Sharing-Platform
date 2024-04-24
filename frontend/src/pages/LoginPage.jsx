@@ -3,11 +3,14 @@ import { useState } from "react";
 import MyButton from "../components/UI/button/MyButton";
 import { login } from "../services/SnippetService";
 import { useNavigate } from "react-router-dom";
-const LoginPage = ({ onLoginSuccess }) => {
+import { useAuth } from "../provider/AuthProvider";
+
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,10 +21,10 @@ const LoginPage = ({ onLoginSuccess }) => {
       return;
     }
 
-    const success = await login({ username: username, password: password });
+    const token = await login({ username: username, password: password });
 
-    if (success) {
-      onLoginSuccess(success);
+    if (token) {
+      setToken(token);
       navigate("/home");
     } else {
       setError("Incorrect username or password");

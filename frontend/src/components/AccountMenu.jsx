@@ -10,11 +10,13 @@ import Stack from "@mui/material/Stack";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../provider/AuthProvider";
 
-const AccountMenu = ({ username, role, deleteAll, logout }) => {
+const AccountMenu = ({ deleteAll, logout }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const navigate = useNavigate();
+  const { userDetails } = useAuth();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -59,7 +61,7 @@ const AccountMenu = ({ username, role, deleteAll, logout }) => {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          {username} ({role})
+          {userDetails.username} ({userDetails.role})
         </Button>
         <Popper
           open={open}
@@ -86,7 +88,7 @@ const AccountMenu = ({ username, role, deleteAll, logout }) => {
                     aria-labelledby="composition-button"
                     onKeyDown={handleListKeyDown}
                   >
-                    {role === "ADMIN" && [
+                    {userDetails.role === "ADMIN" && [
                       <MenuItem
                         onClick={() => navigate("/users")}
                         key="show-users"
