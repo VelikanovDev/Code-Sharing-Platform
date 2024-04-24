@@ -1,13 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SnippetList from "../components/SnippetList";
 import { IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router-dom";
-const HomePage = (props) => {
+import {
+  addComment,
+  deleteComment,
+  deleteSnippet,
+  fetchSnippets,
+} from "../services/SnippetService";
+import { useAuth } from "../provider/AuthProvider";
+
+const HomePage = () => {
   const navigate = useNavigate();
-  if (props.isLoading) {
+  const { userDetails } = useAuth();
+  const [snippets, setSnippets] = useState([]);
+  const [refreshSnippets, setRefreshSnippets] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchSnippets()
+      .then((res) => {
+        setSnippets(res);
+        setRefreshSnippets(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch snippets:", err);
+        if (err.response && err.response.status === 401) {
+          handleLogout();
+        }
+      })
+      .finally(() => setIsLoading(false));
+  }, [refreshSnippets]);
+
+  const handleLogout = () => {
+    localStorage.clear();
+  };
+
+  const handleDeleteSnippet = async (snippetId) => {
+    try {
+      const result = await deleteSnippet(snippetId);
+      setRefreshSnippets(true);
+      console.log(result);
+    } catch (error) {
+      console.error("Error in handleDeleteSnippet", error);
+      throw error;
+    }
+  };
+
+  const handleAddComment = async (snippetId, commentText) => {
+    try {
+      return await addComment(userDetails.username, snippetId, commentText);
+    } catch (error) {
+      console.error("Error in handleAddComment", error);
+      throw error;
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const result = deleteComment(commentId);
+      console.log(result);
+    } catch (error) {
+      console.error("Error in handleDeleteComment", error);
+      throw error;
+    }
+  };
+
+  if (isLoading) {
     return <p>Snippets are loading...</p>;
   }
+
   return (
     <div className={"homePage"}>
       <div className={"headerContainer"}>
@@ -24,14 +88,12 @@ const HomePage = (props) => {
           </IconButton>
         </div>
       </div>
-      {props.snippetList.length > 0 ? (
+      {snippets.length > 0 ? (
         <SnippetList
-          username={props.username}
-          role={props.role}
-          snippets={props.snippetList}
-          deleteSnippet={props.deleteSnippet}
-          addComment={props.addComment}
-          deleteComment={props.deleteComment}
+          snippets={snippets}
+          deleteSnippet={handleDeleteSnippet}
+          addComment={handleAddComment}
+          deleteComment={handleDeleteComment}
         />
       ) : (
         <p>There are no snippets yet. Be the first one!</p>
