@@ -1,7 +1,10 @@
 import React from "react";
 import AccountMenu from "./AccountMenu";
+import { useAuth } from "../provider/AuthProvider";
 
-const AppHeader = ({ isLoggedIn, username, role, deleteAll, logout }) => {
+const AppHeader = ({ deleteAll, logout }) => {
+  const { token } = useAuth();
+
   return (
     <>
       <header className="AppHeader">
@@ -14,14 +17,9 @@ const AppHeader = ({ isLoggedIn, username, role, deleteAll, logout }) => {
           </a>
         </div>
 
-        {isLoggedIn ? (
+        {token ? (
           <div className={"AccountMenu"}>
-            <AccountMenu
-              username={username}
-              role={role}
-              deleteAll={deleteAll}
-              logout={logout}
-            />
+            <AccountMenu deleteAll={deleteAll} logout={logout} />
           </div>
         ) : (
           // Another invisible div to balance the layout when AccountMenu is not present
