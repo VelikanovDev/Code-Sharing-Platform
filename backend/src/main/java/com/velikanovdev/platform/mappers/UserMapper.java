@@ -12,7 +12,6 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "role", expression = "java(user.getRole().getName())")
     UserDto toUserDto(User user);
 
     @Mapping(target = "password", ignore = true)

@@ -1,6 +1,6 @@
 package com.velikanovdev.platform.dto;
 
-import com.velikanovdev.platform.entity.Role;
+import com.velikanovdev.platform.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

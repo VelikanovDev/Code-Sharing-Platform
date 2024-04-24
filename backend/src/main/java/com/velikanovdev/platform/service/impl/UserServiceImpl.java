@@ -4,9 +4,9 @@ import com.velikanovdev.platform.dto.UserAuthDetails;
 import com.velikanovdev.platform.dto.UserCredentials;
 import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.User;
+import com.velikanovdev.platform.enums.Role;
 import com.velikanovdev.platform.exception.AppException;
 import com.velikanovdev.platform.mappers.UserMapper;
-import com.velikanovdev.platform.repository.RoleRepository;
 import com.velikanovdev.platform.repository.UserRepository;
 import com.velikanovdev.platform.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
 
     @Override
     public UserAuthDetails login(UserCredentials userCredentials) {
@@ -48,12 +47,10 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.INSTANCE.signUpToUser(userCredentials);
 
         if(userRepository.findAll().isEmpty()) {
-            user.setRole(roleRepository.findByName("ADMIN")
-                    .orElseThrow(() -> new AppException("Role 'ADMIN' not found", HttpStatus.NOT_FOUND)));
+           user.setRole(Role.ADMIN);
         }
         else {
-            user.setRole(roleRepository.findByName("USER")
-                    .orElseThrow(() -> new AppException("Role 'USER' not found", HttpStatus.NOT_FOUND)));
+            user.setRole(Role.USER);
         }
 
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userCredentials.password())));

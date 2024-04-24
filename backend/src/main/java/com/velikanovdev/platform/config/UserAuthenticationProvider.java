@@ -47,7 +47,7 @@ public class UserAuthenticationProvider {
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .withClaim("username", user.getUsername())
-                .withClaim("role", user.getRole().getName())
+                .withClaim("role", user.getRole().toString())
                 .sign(algorithm);
     }
 
