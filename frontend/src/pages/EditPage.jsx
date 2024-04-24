@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import MyButton from "../components/UI/button/MyButton";
 import { useNavigate, useLocation } from "react-router-dom";
+import { editSnippet } from "../services/SnippetService";
 
-const EditPage = ({ editSnippet }) => {
+const EditPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const snippet = location.state?.snippet;
 
   const [snippetText, setSnippetText] = useState(snippet ? snippet.code : "");
   const [commentError, setCommentError] = useState("");
+
+  const handleEditSnippet = async (snippet) => {
+    try {
+      const result = await editSnippet(snippet);
+      console.log(result);
+    } catch (error) {
+      console.error("Error in handleEditSnippet", error);
+      throw error;
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +32,7 @@ const EditPage = ({ editSnippet }) => {
     }
 
     try {
-      await editSnippet({ ...snippet, code: snippetText });
+      await handleEditSnippet({ ...snippet, code: snippetText });
       navigate("/home");
     } catch (error) {
       console.error(error);
