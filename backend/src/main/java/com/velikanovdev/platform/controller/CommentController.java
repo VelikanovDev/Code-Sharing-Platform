@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
-@RequestMapping("/api/comment")
+@RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
 

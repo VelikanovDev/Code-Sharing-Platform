@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-
     private final UserService userService;
     private final UserAuthenticationProvider userAuthenticationProvider;
 

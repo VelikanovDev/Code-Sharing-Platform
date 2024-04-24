@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/snippet")
+@RequestMapping("/snippet")
 public class SnippetController {
     private final SnippetService snippetService;
 
