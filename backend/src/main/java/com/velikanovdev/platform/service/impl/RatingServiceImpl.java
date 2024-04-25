@@ -11,7 +11,6 @@ import com.velikanovdev.platform.repository.RatingRepository;
 import com.velikanovdev.platform.repository.SnippetRepository;
 import com.velikanovdev.platform.repository.UserRepository;
 import com.velikanovdev.platform.service.RatingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingInfoDto addRating(RatingDto ratingDto) {
-        System.out.println("Service: " + ratingDto.toString());
         Rating rating = RatingMapper.INSTANCE.toRating(ratingDto);
 
         User user = userRepository.findByUsername(ratingDto.username())
@@ -43,7 +41,12 @@ public class RatingServiceImpl implements RatingService {
         Snippet snippet = snippetRepository.findById(ratingDto.snippetId())
                 .orElseThrow(() -> new AppException("Unknown snippet", HttpStatus.BAD_REQUEST));
 
-        System.out.println("Service: " + rating.toString());
+        Rating existedRating = ratingRepository.findByUserAndSnippet(user, snippet);
+
+        if(existedRating != null) {
+            ratingRepository.delete(existedRating);
+        }
+
         rating.setUser(user);
         rating.setSnippet(snippet);
         rating.setDate(LocalDateTime.now());

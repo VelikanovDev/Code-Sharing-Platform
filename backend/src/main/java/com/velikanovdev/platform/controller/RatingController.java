@@ -2,7 +2,6 @@ package com.velikanovdev.platform.controller;
 
 import com.velikanovdev.platform.dto.RatingDto;
 import com.velikanovdev.platform.dto.RatingInfoDto;
-import com.velikanovdev.platform.entity.Rating;
 import com.velikanovdev.platform.service.RatingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
