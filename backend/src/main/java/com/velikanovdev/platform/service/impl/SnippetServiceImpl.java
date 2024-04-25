@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,13 +29,7 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
-    public Snippet getSnippet(Long id) {
-        Optional<Snippet> optionalCodeEntity = snippetRepository.findById(id);
-        return optionalCodeEntity.orElse(null);
-    }
-
-    @Override
-    public Snippet addSnippet(String username, SnippetDto snippetDto) {
+    public SnippetDto addSnippet(String username, SnippetDto snippetDto) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException("User not found with username: " + username, HttpStatus.BAD_REQUEST));
 
@@ -44,17 +37,17 @@ public class SnippetServiceImpl implements SnippetService {
         snippet.setCode(snippetDto.code());
         snippet.setDate(LocalDateTime.now());
         snippet.setUser(user);
-        return snippetRepository.save(snippet);
+        return SnippetMapper.INSTANCE.toSnippetDto(snippetRepository.save(snippet));
     }
 
     @Override
-    public Snippet updateSnippet(SnippetDto snippet) {
+    public SnippetDto updateSnippet(SnippetDto snippet) {
         log.info("SnippetServiceImpl: updating a snippet");
         Snippet existingSnippet = snippetRepository.findById(snippet.id())
                 .orElseThrow(() -> new AppException("Snippet not found with ID: " + snippet.id(), HttpStatus.BAD_REQUEST));
         existingSnippet.setEditDate(LocalDateTime.now());
         existingSnippet.setCode(snippet.code());
-        return snippetRepository.save(existingSnippet);
+        return SnippetMapper.INSTANCE.toSnippetDto(snippetRepository.save(existingSnippet));
     }
 
     @Override

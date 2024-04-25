@@ -24,10 +24,10 @@ public class SnippetController {
     }
 
     @PostMapping(path ="/new", produces = "application/json")
-    public ResponseEntity<Snippet> addSnippet(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<SnippetDto> addSnippet(@AuthenticationPrincipal UserDetails userDetails,
                                         @RequestBody SnippetDto snippetDto) {
         String username = userDetails.getUsername();
-        Snippet newSnippet = snippetService.addSnippet(username, snippetDto);
+        SnippetDto newSnippet = snippetService.addSnippet(username, snippetDto);
         return ResponseEntity.ok(newSnippet);
     }
 
@@ -38,9 +38,9 @@ public class SnippetController {
     }
 
     @PostMapping(path = "/update/{id}", produces = "application/json")
-    public ResponseEntity<Snippet> updateSnippet(@PathVariable Long id, @RequestBody SnippetDto snippet) {
+    public ResponseEntity<SnippetDto> updateSnippet(@PathVariable Long id, @RequestBody SnippetDto snippet) {
         log.info("SnippetController: Update snippet with id " + id);
-        Snippet updatedSnippet = snippetService.updateSnippet(snippet);
+        SnippetDto updatedSnippet = snippetService.updateSnippet(snippet);
         return ResponseEntity.ok(updatedSnippet);
     }
 

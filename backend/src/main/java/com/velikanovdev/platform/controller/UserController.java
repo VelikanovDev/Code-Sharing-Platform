@@ -7,13 +7,13 @@ import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class UserController {
     public ResponseEntity<UserAuthDetails> register(@RequestBody @Valid UserCredentials userCredentials) {
         UserAuthDetails createdUser = userService.register(userCredentials);
         createdUser.setToken(userAuthenticationProvider.createToken(createdUser));
-        return ResponseEntity.created(URI.create("/users/" + createdUser.getId())).body(createdUser);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/users")
