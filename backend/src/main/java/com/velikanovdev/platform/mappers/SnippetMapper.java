@@ -11,8 +11,5 @@ import org.mapstruct.factory.Mappers;
 public interface SnippetMapper {
    SnippetMapper INSTANCE = Mappers.getMapper(SnippetMapper.class);
 
-   @Mappings({
-           @Mapping(target = "ratings", expression = "java(snippet.getRatings().stream().map(RatingMapper.INSTANCE::toRatingInfoDto).toList();)")
-   })
    SnippetDto toSnippetDto(Snippet snippet);
 }
