@@ -41,4 +41,7 @@ public class Snippet {
 
     @OneToMany(mappedBy = "snippet", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "snippet", cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 }
