@@ -22,9 +22,8 @@ public class Rating {
     @Column(nullable = false)
     private int value; // Assuming ratings are integers (e.g., 1-5)
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // The user who provided the rating
+    @Column
+    private String username;
 
     @ManyToOne
     @JoinColumn(name = "snippet_id", nullable = false)
