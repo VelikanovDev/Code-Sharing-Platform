@@ -1,12 +1,12 @@
 package com.velikanovdev.platform.service.impl;
 
-import com.velikanovdev.platform.dto.RatingDto;
-import com.velikanovdev.platform.dto.RatingInfoDto;
+import com.velikanovdev.platform.dto.RatingRequestDto;
+import com.velikanovdev.platform.dto.RatingResponseDto;
 import com.velikanovdev.platform.entity.Rating;
 import com.velikanovdev.platform.entity.Snippet;
 import com.velikanovdev.platform.entity.User;
 import com.velikanovdev.platform.exception.AppException;
-import com.velikanovdev.platform.mappers.RatingMapper;
+import com.velikanovdev.platform.mappers.EntityDtoMapper;
 import com.velikanovdev.platform.repository.RatingRepository;
 import com.velikanovdev.platform.repository.SnippetRepository;
 import com.velikanovdev.platform.repository.UserRepository;
@@ -32,13 +32,13 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingInfoDto addRating(RatingDto ratingDto) {
-        Rating rating = RatingMapper.INSTANCE.toRating(ratingDto);
+    public RatingResponseDto addRating(RatingRequestDto ratingRequestDto) {
+        Rating rating = EntityDtoMapper.INSTANCE.toRating(ratingRequestDto);
 
-        User user = userRepository.findByUsername(ratingDto.username())
+        User user = userRepository.findByUsername(ratingRequestDto.username())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.BAD_REQUEST));
 
-        Snippet snippet = snippetRepository.findById(ratingDto.snippetId())
+        Snippet snippet = snippetRepository.findById(ratingRequestDto.snippetId())
                 .orElseThrow(() -> new AppException("Unknown snippet", HttpStatus.BAD_REQUEST));
 
         Rating existedRating = ratingRepository.findByUserAndSnippet(user, snippet);
@@ -51,14 +51,14 @@ public class RatingServiceImpl implements RatingService {
         rating.setSnippet(snippet);
         rating.setDate(LocalDateTime.now());
 
-        return RatingMapper.INSTANCE.toRatingInfoDto(ratingRepository.save(rating));
+        return EntityDtoMapper.INSTANCE.toRatingResponseDto(ratingRepository.save(rating));
     }
 
     @Override
-    public List<RatingInfoDto> findRatingsBySnippet(Long snippetId) {
+    public List<RatingResponseDto> findRatingsBySnippet(Long snippetId) {
         Snippet snippet = snippetRepository.findById(snippetId)
                 .orElseThrow(() -> new AppException("Unknown snippet", HttpStatus.BAD_REQUEST));
 
-        return snippet.getRatings().stream().map(RatingMapper.INSTANCE::toRatingInfoDto).toList();
+        return snippet.getRatings().stream().map(EntityDtoMapper.INSTANCE::toRatingResponseDto).toList();
     }
 }
