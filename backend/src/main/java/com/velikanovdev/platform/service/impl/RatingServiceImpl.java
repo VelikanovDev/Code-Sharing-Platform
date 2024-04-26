@@ -41,13 +41,13 @@ public class RatingServiceImpl implements RatingService {
         Snippet snippet = snippetRepository.findById(ratingRequestDto.snippetId())
                 .orElseThrow(() -> new AppException("Unknown snippet", HttpStatus.BAD_REQUEST));
 
-        Rating existedRating = ratingRepository.findByUserAndSnippet(user, snippet);
+        Rating existedRating = ratingRepository.findByUsernameAndSnippet(user.getUsername(), snippet);
 
         if(existedRating != null) {
             ratingRepository.delete(existedRating);
         }
 
-        rating.setUser(user);
+        rating.setUsername(user.getUsername());
         rating.setSnippet(snippet);
         rating.setDate(LocalDateTime.now());
 

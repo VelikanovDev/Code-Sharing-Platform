@@ -35,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
         commentToSave.setText(commentDto.text());
         commentToSave.setDate(LocalDateTime.now());
         commentToSave.setSnippet(snippet);
+        commentToSave.setUsername(commentDto.username());
         return EntityDtoMapper.INSTANCE.toCommentResponseDto(commentRepository.save(commentToSave));
     }
 

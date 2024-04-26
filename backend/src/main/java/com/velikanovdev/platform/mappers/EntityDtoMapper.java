@@ -12,18 +12,18 @@ public interface EntityDtoMapper {
     EntityDtoMapper INSTANCE = Mappers.getMapper(EntityDtoMapper.class);
 
     UserDto toUserDto(User user);
+
     UserAuthDetails toUserAuthDetails(User user);
-    SnippetDto toSnippetDto(Snippet snippet);
-    SnippetCodeDto toSnippetCodeDto(Snippet snippet);
 
     @Mapping(target = "password", ignore = true)
     User signUpToUser(UserCredentials registerRequest);
 
+    SnippetDto toSnippetDto(Snippet snippet);
+
+    SnippetCodeDto toSnippetCodeDto(Snippet snippet);
+
     Rating toRating(RatingRequestDto ratingDto);
 
-    @Mappings({
-            @Mapping(target = "username", source = "rating.user.username")
-    })
     RatingResponseDto toRatingResponseDto(Rating rating);
 
     CommentResponseDto toCommentResponseDto(Comment comment);
