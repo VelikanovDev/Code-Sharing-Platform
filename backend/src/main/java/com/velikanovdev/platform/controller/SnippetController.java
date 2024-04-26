@@ -44,17 +44,17 @@ public class SnippetController {
         return ResponseEntity.ok(updatedSnippet);
     }
 
-    @DeleteMapping(path = "/delete", produces = "application/json")
-    public ResponseEntity<String> deleteAllSnippets() {
+    @DeleteMapping(path = "/deleteAll", produces = "application/json")
+    public ResponseEntity<Void> deleteAllSnippets() {
         log.info("Deleting all snippets");
         snippetService.deleteAllSnippets();
-        return ResponseEntity.ok("Snippets have been deleted");
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/delete/{id}", produces = "application/json")
-    public ResponseEntity<String> deleteSnippet(@PathVariable Long id) {
+    public ResponseEntity<SnippetDto> deleteSnippet(@PathVariable Long id) {
         log.info("Deleting snippet with id " + id);
-        snippetService.deleteSnippet(id);
-        return ResponseEntity.ok("Snippet has been deleted");
+        SnippetDto snippetToDelete = snippetService.deleteSnippet(id);
+        return ResponseEntity.ok(snippetToDelete);
     }
 }

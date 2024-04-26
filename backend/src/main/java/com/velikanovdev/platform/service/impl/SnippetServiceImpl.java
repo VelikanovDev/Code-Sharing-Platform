@@ -60,10 +60,12 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
-    public void deleteSnippet(Long id) {
-        snippetRepository.findById(id)
+    public SnippetDto deleteSnippet(Long id) {
+        Snippet snippetToDelete = snippetRepository.findById(id)
                 .orElseThrow(() -> new AppException("Snippet not found with ID: " + id, HttpStatus.BAD_REQUEST));
         snippetRepository.deleteById(id);
+
+        return EntityDtoMapper.INSTANCE.toSnippetDto(snippetToDelete);
     }
 
     @Override
