@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserAuthDetails register(UserCredentials userCredentials) {
+    public UserDto register(UserCredentials userCredentials) {
         Optional<User> optionalUser = userRepository.findByUsername(userCredentials.username());
 
         if (optionalUser.isPresent()) {
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
 
-        return UserMapper.INSTANCE.toUserAuthDetails(savedUser);
+        return UserMapper.INSTANCE.toUserDto(savedUser);
     }
 
     @Override

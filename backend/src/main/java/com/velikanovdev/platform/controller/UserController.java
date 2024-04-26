@@ -30,9 +30,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserAuthDetails> register(@RequestBody @Valid UserCredentials userCredentials) {
-        UserAuthDetails createdUser = userService.register(userCredentials);
-        createdUser.setToken(userAuthenticationProvider.createToken(createdUser));
+    public ResponseEntity<UserDto> register(@RequestBody @Valid UserCredentials userCredentials) {
+        UserDto createdUser = userService.register(userCredentials);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
