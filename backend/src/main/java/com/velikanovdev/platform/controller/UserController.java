@@ -4,6 +4,7 @@ import com.velikanovdev.platform.config.UserAuthenticationProvider;
 import com.velikanovdev.platform.dto.UserAuthDetails;
 import com.velikanovdev.platform.dto.UserCredentials;
 import com.velikanovdev.platform.dto.UserDto;
+import com.velikanovdev.platform.dto.UserInfoDto;
 import com.velikanovdev.platform.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<UserDto> getAllUsers() {
+    public List<UserInfoDto> getAllUsers() {
         return userService.getAllUsers();
     }
 }
