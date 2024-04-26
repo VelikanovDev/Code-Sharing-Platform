@@ -1,8 +1,9 @@
 package com.velikanovdev.platform.service;
 
-import com.velikanovdev.platform.entity.Comment;
+import com.velikanovdev.platform.dto.CommentRequestDto;
+import com.velikanovdev.platform.dto.CommentResponseDto;
 
 public interface CommentService {
-    Comment addComment(Long snippetId, Comment comment);
-    void deleteComment(Long id);
+    CommentResponseDto addComment(CommentRequestDto comment);
+    CommentResponseDto deleteComment(Long id);
 }

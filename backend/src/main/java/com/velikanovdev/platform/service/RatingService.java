@@ -1,12 +1,11 @@
 package com.velikanovdev.platform.service;
 
-import com.velikanovdev.platform.dto.RatingDto;
-import com.velikanovdev.platform.dto.RatingInfoDto;
-import com.velikanovdev.platform.entity.Rating;
+import com.velikanovdev.platform.dto.RatingRequestDto;
+import com.velikanovdev.platform.dto.RatingResponseDto;
 
 import java.util.List;
 
 public interface RatingService {
-    RatingInfoDto addRating(RatingDto ratingDto);
-    List<RatingInfoDto> findRatingsBySnippet(Long snippetId);
+    RatingResponseDto addRating(RatingRequestDto ratingResponseDto);
+    List<RatingResponseDto> findRatingsBySnippet(Long snippetId);
 }

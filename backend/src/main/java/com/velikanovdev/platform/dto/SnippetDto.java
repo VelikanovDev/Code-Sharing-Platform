@@ -13,4 +13,4 @@ public record SnippetDto (Long id,
                           @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss") LocalDateTime date,
                           UserDto user,
                           List<Comment> comments,
-                          List<RatingInfoDto> ratings) { }
+                          List<RatingRequestDto> ratings) { }

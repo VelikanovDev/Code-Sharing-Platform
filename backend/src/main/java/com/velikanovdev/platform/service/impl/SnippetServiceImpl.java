@@ -1,10 +1,11 @@
 package com.velikanovdev.platform.service.impl;
 
+import com.velikanovdev.platform.dto.SnippetCodeDto;
 import com.velikanovdev.platform.dto.SnippetDto;
 import com.velikanovdev.platform.entity.Snippet;
 import com.velikanovdev.platform.entity.User;
 import com.velikanovdev.platform.exception.AppException;
-import com.velikanovdev.platform.mappers.SnippetMapper;
+import com.velikanovdev.platform.mappers.EntityDtoMapper;
 import com.velikanovdev.platform.repository.SnippetRepository;
 import com.velikanovdev.platform.repository.UserRepository;
 import com.velikanovdev.platform.service.SnippetService;
@@ -29,7 +30,7 @@ public class SnippetServiceImpl implements SnippetService {
     }
 
     @Override
-    public SnippetDto addSnippet(String username, SnippetDto snippetDto) {
+    public SnippetDto addSnippet(String username, SnippetCodeDto snippetDto) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException("User not found with username: " + username, HttpStatus.BAD_REQUEST));
 
@@ -37,24 +38,24 @@ public class SnippetServiceImpl implements SnippetService {
         snippet.setCode(snippetDto.code());
         snippet.setDate(LocalDateTime.now());
         snippet.setUser(user);
-        return SnippetMapper.INSTANCE.toSnippetDto(snippetRepository.save(snippet));
+        return EntityDtoMapper.INSTANCE.toSnippetDto(snippetRepository.save(snippet));
     }
 
     @Override
-    public SnippetDto updateSnippet(SnippetDto snippet) {
+    public SnippetDto updateSnippet(SnippetCodeDto snippet) {
         log.info("SnippetServiceImpl: updating a snippet");
         Snippet existingSnippet = snippetRepository.findById(snippet.id())
                 .orElseThrow(() -> new AppException("Snippet not found with ID: " + snippet.id(), HttpStatus.BAD_REQUEST));
         existingSnippet.setEditDate(LocalDateTime.now());
         existingSnippet.setCode(snippet.code());
-        return SnippetMapper.INSTANCE.toSnippetDto(snippetRepository.save(existingSnippet));
+        return EntityDtoMapper.INSTANCE.toSnippetDto(snippetRepository.save(existingSnippet));
     }
 
     @Override
     public List<SnippetDto> getLatest() {
         return snippetRepository.findAllByOrderByDateDesc()
                 .stream()
-                .map(SnippetMapper.INSTANCE::toSnippetDto)
+                .map(EntityDtoMapper.INSTANCE::toSnippetDto)
                 .toList();
     }
 

@@ -6,7 +6,7 @@ import com.velikanovdev.platform.dto.UserDto;
 import com.velikanovdev.platform.entity.User;
 import com.velikanovdev.platform.enums.Role;
 import com.velikanovdev.platform.exception.AppException;
-import com.velikanovdev.platform.mappers.UserMapper;
+import com.velikanovdev.platform.mappers.EntityDtoMapper;
 import com.velikanovdev.platform.repository.UserRepository;
 import com.velikanovdev.platform.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.BAD_REQUEST));
 
         if (passwordEncoder.matches(CharBuffer.wrap(userCredentials.password()), user.getPassword())) {
-            return UserMapper.INSTANCE.toUserAuthDetails(user);
+            return EntityDtoMapper.INSTANCE.toUserAuthDetails(user);
         }
 
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException("User with login " + userCredentials.username() + " already exists", HttpStatus.CONFLICT);
         }
 
-        User user = UserMapper.INSTANCE.signUpToUser(userCredentials);
+        User user = EntityDtoMapper.INSTANCE.signUpToUser(userCredentials);
 
         if(userRepository.findAll().isEmpty()) {
            user.setRole(Role.ADMIN);
@@ -57,13 +57,13 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
 
-        return UserMapper.INSTANCE.toUserDto(savedUser);
+        return EntityDtoMapper.INSTANCE.toUserDto(savedUser);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
 
-        return users.stream().map(UserMapper.INSTANCE::toUserDto).toList();
+        return users.stream().map(EntityDtoMapper.INSTANCE::toUserDto).toList();
     }
 }
