@@ -40,7 +40,7 @@ const HomePage = () => {
 
   const handleDeleteSnippet = async (snippetId) => {
     try {
-      const result = await deleteSnippet(snippetId);
+      await deleteSnippet(snippetId);
       setRefreshSnippets(true);
     } catch (error) {
       console.error("Error in handleDeleteSnippet", error);

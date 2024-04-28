@@ -24,6 +24,8 @@ const UsersPage = () => {
               <th>Username</th>
               <th>Role</th>
               <th>Snippet posted</th>
+              <th>Comments</th>
+              <th>Rating provided</th>
             </tr>
           </thead>
           <tbody>
@@ -32,6 +34,8 @@ const UsersPage = () => {
                 <td>{user.username}</td>
                 <td>{user.role}</td>
                 <td>{user.snippets.length}</td>
+                <td>{user.comments.length}</td>
+                <td>{user.ratings.length}</td>
               </tr>
             ))}
           </tbody>

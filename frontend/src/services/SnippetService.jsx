@@ -118,7 +118,7 @@ export const deleteAllSnippets = async () => {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await axios.delete(`${API_BASE_URL}/snippet/delete`, {
+    const response = await axios.delete(`${API_BASE_URL}/snippet/deleteAll`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -159,8 +159,9 @@ export const addComment = async (username, snippetId, text) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/comment/add/${snippetId}`,
+      `${API_BASE_URL}/comment/add`,
       {
+        snippetId,
         username,
         text,
       },
@@ -192,6 +193,62 @@ export const deleteComment = async (commentId) => {
       },
     );
     return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : error.message,
+    );
+  }
+};
+
+export const addRating = async (value, username, snippetId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/rating/add`,
+      {
+        value,
+        username,
+        snippetId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : error.message,
+    );
+  }
+};
+
+export const getAverageRating = async (snippetId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/rating/snippet/${snippetId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    // Extract ratings from the response data
+    const ratings = response.data;
+
+    // Calculate the total sum of ratings
+    const totalRatingSum = ratings.reduce(
+      (sum, rating) => sum + rating.value,
+      0,
+    );
+
+    // Calculate the average rating
+    return totalRatingSum / ratings.length;
   } catch (error) {
     throw new Error(
       error.response ? error.response.data.message : error.message,
