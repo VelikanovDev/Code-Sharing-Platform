@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import AppHeader from "./AppHeader";
 import { Outlet, useNavigate } from "react-router-dom";
 import { deleteAllSnippets } from "../services/SnippetService";

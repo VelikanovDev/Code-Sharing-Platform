@@ -42,7 +42,6 @@ const HomePage = () => {
     try {
       const result = await deleteSnippet(snippetId);
       setRefreshSnippets(true);
-      console.log(result);
     } catch (error) {
       console.error("Error in handleDeleteSnippet", error);
       throw error;
@@ -60,8 +59,7 @@ const HomePage = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      const result = deleteComment(commentId);
-      console.log(result);
+      await deleteComment(commentId);
     } catch (error) {
       console.error("Error in handleDeleteComment", error);
       throw error;
