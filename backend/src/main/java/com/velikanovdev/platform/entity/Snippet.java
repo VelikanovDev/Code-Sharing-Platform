@@ -1,7 +1,5 @@
 package com.velikanovdev.platform.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,7 +34,6 @@ public class Snippet {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "snippet", cascade = CascadeType.ALL)

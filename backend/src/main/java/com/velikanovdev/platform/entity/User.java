@@ -35,7 +35,6 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @ToString.Exclude
     private List<Snippet> snippets;
 
     @Override

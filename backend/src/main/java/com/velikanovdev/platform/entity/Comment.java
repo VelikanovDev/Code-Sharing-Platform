@@ -1,7 +1,6 @@
 package com.velikanovdev.platform.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +35,5 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "snippet_id", referencedColumnName = "id")
-    @JsonIgnore
     private Snippet snippet;
 }
