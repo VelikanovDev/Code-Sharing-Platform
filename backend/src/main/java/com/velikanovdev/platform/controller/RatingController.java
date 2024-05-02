@@ -3,6 +3,7 @@ package com.velikanovdev.platform.controller;
 import com.velikanovdev.platform.dto.RatingRequestDto;
 import com.velikanovdev.platform.dto.RatingResponseDto;
 import com.velikanovdev.platform.service.RatingService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,8 @@ public class RatingController {
 
     @PostMapping("/add")
     public ResponseEntity<RatingResponseDto> addRating(@RequestBody RatingRequestDto ratingResponseDto) {
-        System.out.println(ratingResponseDto.toString());
         RatingResponseDto rating = ratingService.addRating(ratingResponseDto);
-        System.out.println("End of the addRating controller");
-        return ResponseEntity.ok(rating);
+        return new ResponseEntity<>(rating, HttpStatus.CREATED);
     }
 
     @GetMapping("/snippet/{snippetId}")

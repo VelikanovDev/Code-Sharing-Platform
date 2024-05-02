@@ -5,6 +5,7 @@ import com.velikanovdev.platform.dto.SnippetDto;
 import com.velikanovdev.platform.service.SnippetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +29,7 @@ public class SnippetController {
                                         @RequestBody SnippetCodeDto snippetCodeDto) {
         String username = userDetails.getUsername();
         SnippetDto newSnippet = snippetService.addSnippet(username, snippetCodeDto);
-        return ResponseEntity.ok(newSnippet);
+        return new ResponseEntity<>(newSnippet, HttpStatus.CREATED);
     }
 
     @GetMapping("/latest")
@@ -37,10 +38,14 @@ public class SnippetController {
         return ResponseEntity.ok(snippets);
     }
 
-    @PostMapping(path = "/update/{id}", produces = "application/json")
+    @PutMapping(path = "/update/{id}", produces = "application/json")
     public ResponseEntity<SnippetDto> updateSnippet(@PathVariable Long id, @RequestBody SnippetCodeDto snippetCodeDto) {
         log.info("SnippetController: Update snippet with id " + id);
         SnippetDto updatedSnippet = snippetService.updateSnippet(snippetCodeDto);
+
+        if (updatedSnippet == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(updatedSnippet);
     }
 

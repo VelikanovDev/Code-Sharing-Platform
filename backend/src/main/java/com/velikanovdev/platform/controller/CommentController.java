@@ -5,6 +5,7 @@ import com.velikanovdev.platform.dto.CommentResponseDto;
 import com.velikanovdev.platform.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addComment(@RequestBody CommentRequestDto comment) {
         log.info("Adding comment to the snippet with id " + comment.snippetId());
         CommentResponseDto addedComment = commentService.addComment(comment);
-        return ResponseEntity.ok(addedComment);
+        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/delete/{id}", produces = "application/json")
