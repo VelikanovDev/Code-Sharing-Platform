@@ -20,7 +20,7 @@ public class Rating {
     private Long id;
 
     @Column(nullable = false)
-    private int value; // Assuming ratings are integers (e.g., 1-5)
+    private Integer ratingValue; // Assuming ratings are integers (e.g., 0-5)
 
     @Column
     private String username;

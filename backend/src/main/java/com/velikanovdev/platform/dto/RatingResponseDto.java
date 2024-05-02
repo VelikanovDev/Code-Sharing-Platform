@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 public record RatingResponseDto(
-        @NotEmpty int value,
+        @NotEmpty int ratingValue,
         String username,
         @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss") LocalDateTime date) {}
