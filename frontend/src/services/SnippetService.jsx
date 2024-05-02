@@ -136,7 +136,7 @@ export const deleteAllSnippets = async () => {
 export const editSnippet = async (snippet) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.post(
+    const response = await axios.put(
       `${API_BASE_URL}/snippet/update/${snippet.id}`,
       snippet,
       {
@@ -200,13 +200,13 @@ export const deleteComment = async (commentId) => {
   }
 };
 
-export const addRating = async (value, username, snippetId) => {
+export const addRating = async (ratingValue, username, snippetId) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
       `${API_BASE_URL}/rating/add`,
       {
-        value,
+        ratingValue,
         username,
         snippetId,
       },
@@ -243,7 +243,7 @@ export const getAverageRating = async (snippetId) => {
 
     // Calculate the total sum of ratings
     const totalRatingSum = ratings.reduce(
-      (sum, rating) => sum + rating.value,
+      (sum, rating) => sum + rating.ratingValue,
       0,
     );
 
